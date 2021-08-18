@@ -398,4 +398,9 @@ for (decltype(s.size()) index = 0; index != s.size() && !isspace(s[index]); ++in
 
 
 ## 3.3 标准库类型vector
-
+标准库类型`vector`（容器）表示 **对象** 的集合，其中所有对象的类型都相同。集合中每个对象都有一个与之对应的索引用于访问对象。  
+要使用`vector`必须包含适当的头文件和`using`声明：
+```cpp
+#include <vector>
+using std::vector;
+```
