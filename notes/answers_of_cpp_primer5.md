@@ -634,3 +634,271 @@ for(auto &c : s){ /* ... */ }
 ```
 
 > 要根据for循环中的代码来看是否合法，c是string 对象中字符的引用，s是常量。因此如果for循环中的代码重新给c赋值就会非法，如果不改变c的值，那么合法。
+
+
+## 3.3 标准库类型vector
+### 3.3.1 定义和初始化vector对象
+#### 练习3.12
+下列vector对象的定义有不正确的吗？如果有，请指出来。对于正确的，描述其执行结果；对于不正确的，说明其错误的原因。
+```cpp
+(a)vector<vector<int>> ivec;
+(b)vector<string> svec = ivec;
+(c)vector<string> svec(10, "null");
+```
+> (a)合法，将对`ivec`进行默认初始化 (b)不合法，`ivec`和`svec`的类型不一致 (c)合法，将把`svec`初始化为10个初始值为`"null"`的`string`集合。
+
+
+#### 练习3.13 下列的vector对象各包含多少个元素？这些元素的值分别是多少？
+```cpp
+(a)vector<int> v1;
+(b)vector<int> v2(10);  
+(c)vector<int> v3(10, 42); 
+(d)vector<int> v4{10};   
+(e)vector<int> v5{10, 42 }; 
+(f)vector<string> v6{10}; 
+(g)vector<string> v7{ 10, "hi" }; 
+```
+> (a)`size：`0； `value：`no value  
+> (b)`size：`10； `value：`0  
+> (c)`size：`10 ；`value：`42  
+> (d)`size：` 1；`value：`10  
+> (e)`size：` 2；`value：`10，42  
+> (f)`size：` 10；`value：`""  
+> (g)`size：` 10；`value：`"hi"
+
+### 3.3.2 向vector对象中添加元素
+#### 练习3.14
+编写一段程序，用cin读入一组整数并把它们存入一个vector对象。
+```cpp
+#include <iostream>
+#include <vector>
+using std::vector;
+using std::cin;
+using std::cout;
+using std::endl;
+
+int main()
+{
+	vector<int> v;
+	int i;
+	while (cin >> i)
+	{
+		v.push_back(i);
+	}
+	return 0;
+}
+```
+
+#### 练习3.15
+改写上题程序，不过这次读入的是字符串。
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cctype>
+using std::vector;
+using std::string;
+using std::cin;
+using std::cout;
+using std::endl;
+
+int main()
+{
+	vector<string> v;
+	string i;
+	while (cin >> i)
+	{
+		v.push_back(i);
+	}
+	return 0;
+}
+```
+
+### 3.3.3 其他vector操作
+#### 练习3.16
+编写一段程序，把练习3.13中`vector`对象的容量和具体内容输出出来
+```cpp
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <vector>
+
+using std::cin;
+using std::cout;
+using std::endl;
+using std::vector;
+using std::string;
+
+int main()
+{
+	vector<int> v1;     
+	vector<int> v2(10);    
+	vector<int> v3(10, 42); 
+	vector<int> v4{ 10 };    
+	vector<int> v5{ 10, 42 }; 
+	vector<string> v6{ 10 };  
+	vector<string> v7{ 10, "hi" }; 
+
+	cout << "v1 size :" << v1.size() << endl;
+	cout << "v2 size :" << v2.size() << endl;
+	cout << "v3 size :" << v3.size() << endl;
+	cout << "v4 size :" << v4.size() << endl;
+	cout << "v5 size :" << v5.size() << endl;
+	cout << "v6 size :" << v6.size() << endl;
+	cout << "v7 size :" << v7.size() << endl;
+
+	cout << "v1 content: ";
+	for (auto i : v1)
+	{
+		cout << i << " , ";
+	}
+	cout << endl;
+
+	cout << "v2 content: ";
+	for (auto i : v2)
+	{
+		cout << i << " , ";
+	}
+	cout << endl;
+
+	cout << "v3 content: ";
+	for (auto i : v3)
+	{
+		cout << i << " , ";
+	}
+	cout << endl;
+
+	cout << "v4 content: ";
+	for (auto i : v4)
+	{
+		cout << i << " , ";
+	}
+	cout << endl;
+
+	cout << "v5 content: ";
+	for (auto i : v5)
+	{
+		cout << i << " , ";
+	}
+	cout << endl;
+
+	cout << "v6 content: ";
+	for (auto i : v6)
+	{
+		cout << i << " , ";
+	}
+	cout << endl;
+
+	cout << "v7 content: ";
+	for (auto i : v7)
+	{
+		cout << i << " , ";
+	}
+	cout << endl;
+	return 0;
+}
+```
+
+#### 练习3.17
+从`cin`读入一组词并把它们存入一个`vector`对象，然后设法把所有词都改为大写形式。输出改变后的结果，每个词占一行。
+```cpp
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <vector>
+
+using std::cin;
+using std::cout;
+using std::endl;
+using std::vector;
+using std::string;
+
+int main()
+{
+	vector<string> v;
+	string s;
+
+	while (cin >> s)
+	{
+		v.push_back(s);
+	}
+
+	for (auto &str : v)
+	{
+		for (auto &c : str)
+		{
+			c = toupper(c);
+		}
+	}
+
+	for (auto i : v)
+	{
+		cout << i << endl;
+	}
+	return 0;
+}
+```
+
+#### 练习3.18
+下面的程序合法吗？如果不合法，你准备如何修改？
+```cpp
+vector<int> ivec;
+ivec[0] = 42;
+```
+
+> 不合法，不能对空`vector`进行下标赋值操作。应改为：
+> ```cpp
+> ivec.push_back(42);
+> ```
+
+#### 练习3.19
+如果想定义一个含有`10`个元素的`vector`对象，所有元素的值都是42，请例举三种不同的实现方法，哪种方式更好呢？  
+> 如下三种：
+> ```cpp
+> vector<int> ivec1(10, 42);
+> vector<int> ivec2{ 42, 42, 42, 42, 42, 42, 42, 42, 42, 42 };
+> vector<int> ivec3;
+> for (int i = 0; i < 10; ++i)
+> 	ivec3.push_back(42);
+> ```
+第一种方式最好。
+
+#### 练习3.20
+读入一组整数并把他们存入一个`vector`对象，将每对相邻整数的和输出出来。改写你的程序，这次要求先输出第一个和最后一个元素的和，接着输入第二个和倒数第二个元素的和，以此类推。
+```cpp
+#include <iostream>
+#include <vector>
+
+using std::cout;
+using std::cin;
+using std::endl;
+using std::vector;
+
+int main()
+{
+    //question 1
+    vector<int> ivec;
+    int i;
+    while (cin >> i)
+    {
+        ivec.push_back(i);
+    }
+
+    for (int i = 0; i < ivec.size() - 1; i++)
+    {
+        cout << ivec[i] + ivec[i + 1] << endl;
+    }
+
+    //question 2
+    int m = 0;
+    int n = ivec.size() - 1;
+    while (n > m)
+    {
+        cout << ivec[m] + ivec[n] << endl;
+        ++m;
+        --n;
+    }
+    return 0;
+    
+}
+```
