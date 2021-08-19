@@ -902,3 +902,188 @@ int main()
     
 }
 ```
+
+## 3.4 迭代器介绍
+### 3.4.1 使用迭代器
+#### 练习3.21
+请使用迭代器重做 **练习3.16**
+```cpp
+#include <iostream>
+#include <string>
+#include <iterator>
+#include <vector>
+
+using std::cout;
+using std::string;
+using std::endl;
+using std::vector;
+
+void print(const vector<int>& vec)
+{
+    cout << "size: " << vec.size() << endl 
+        << " content :";
+    for (auto it = vec.begin(); it !=  vec.end(); ++it)
+    {
+        cout << *it << (it != vec.end() - 1 ? ", " : "");
+    }
+    cout << endl;
+    
+}
+
+void print(const vector<string>& vec)
+{
+    cout << "size: " << vec.size() << endl 
+        << " content :";
+    for (auto it = vec.begin(); it !=  vec.end(); ++it)
+    {
+        cout << *it << (it != vec.end() - 1 ? ", " : "");
+    }
+    cout << endl;
+}
+
+int main()
+{
+    vector<int> v1;     
+	vector<int> v2(10);    
+	vector<int> v3(10, 42); 
+	vector<int> v4{ 10 };    
+	vector<int> v5{ 10, 42 }; 
+	vector<string> v6{ 10 };  
+	vector<string> v7{ 10, "hi" }; 
+
+    print(v1);
+    print(v2);
+    print(v3);
+    print(v4);
+    print(v5);
+    print(v6);
+    print(v7);
+
+    return 0;
+}
+```
+
+#### 练习3.22
+修改之前那个输出text第一段的程序，首先把text的第一段全部改成大写形式，然后输出它。
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    vector<string> text;
+    text.push_back("aaaaaaaaaa aaaaaaaaa aaaaaa");
+	text.push_back("");
+	text.push_back("bbbbbbbbbbbbbb bbbbbbbbbbb bbbbbbbbbbbbb");
+
+    for (auto it = text.begin(); it != text.end() && !it->empty(); ++it)
+    {
+        for (auto &c : *it)
+        {
+            if (isalpha(c)) c = toupper(c);
+        }
+    }
+
+    for (auto it : text)
+    {
+        cout << it << endl;
+    }
+    
+    return 0;
+    
+}
+```
+
+#### 练习3.23
+编写一段程序，创建一个含有10个整数的`vector`对象，然后使用迭代器将所有的元素都变成原来的两倍，输出`vector`对象的内容，检验程序是否正确。
+```cpp
+#include <iostream>
+#include <vector>
+#include <iterator>
+
+using namespace std;
+
+int main()
+{
+    vector<int> ivec{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    
+    for (auto it = ivec.begin(); it != ivec.end(); ++it)
+    {
+        *it  = *it * 2;
+        cout << *it << endl;
+    }
+    return 0;
+}
+```
+
+
+### 3.4.1 迭代器运算
+#### 练习3.24 
+请使用迭代器重做练习3.20
+```cpp
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+    vector<int> ivec;
+    int i;
+    while (cin >> i)
+    {
+        ivec.push_back(i);
+    }
+    
+    for (auto it = ivec.begin(); it != ivec.end() - 1; it++)
+    {
+        cout << *it + *(it + 1) << endl;
+    }
+
+    cout << "---------------------------------" << endl;
+
+	auto it1 = ivec.begin();
+	auto it2 = ivec.end() - 1;
+	while (it1 < it2)
+	{
+		cout << *it1 + *it2 << endl;
+		++it1;
+		--it2;
+	}
+	return 0;
+}
+```
+
+#### 练习3.25 
+3.3.3节划分分数段的程序是使用下标运算符实现的，请利用迭代器改写该程序实现完全相同的功能。
+```cpp
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	vector<unsigned> scores(11, 0);
+	unsigned grade;
+	while (cin >> grade)
+	{
+		if (grade <= 100)
+			++*(scores.begin() + grade / 10);
+	}
+
+	for (auto s : scores)
+		cout << s << " ";
+	cout << endl;
+
+	return 0;
+}
+```
+
+#### 练习3.26
+在100页的二分搜索程序中，为什么用的是 mid = beg + (end - beg) / 2, 而非 mid = (beg + end) / 2 ; ?
+> 因为迭代器支持的运算只有 `-` ，而没有 `+` 。`end - beg` 意思是相距若干个元素，将之除以`2`然后与`beg`相加，表示将`beg`移动到一半的位置。
