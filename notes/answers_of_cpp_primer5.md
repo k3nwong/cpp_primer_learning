@@ -1087,3 +1087,100 @@ int main()
 #### 练习3.26
 在100页的二分搜索程序中，为什么用的是 mid = beg + (end - beg) / 2, 而非 mid = (beg + end) / 2 ; ?
 > 因为迭代器支持的运算只有 `-` ，而没有 `+` 。`end - beg` 意思是相距若干个元素，将之除以`2`然后与`beg`相加，表示将`beg`移动到一半的位置。
+
+
+## 3.5 数组
+### 3.5.1 定义和初始化内置数组
+#### 练习3.27
+假设`txt_size`是一个无参函数，它的返回值是`int`。请回答下列哪个定义是非法的，为什么？
+```cpp
+unsigned buf_size = 1024;
+(a) int ia[buf_size];
+(b) int ia[4 * 7 - 14];
+(c) int ia[txt_size()];
+(d) char st[11] = "fundamental";
+```
+> (a) 非法。纬度必须是一个常量表达式。   
+> (b) 合法。  
+> (c) 非法。txt_size() 的值必须要到运行时才能得到。  
+> (d) 非法。数组的大小应该是12。
+
+#### 练习3.28
+下列数组中元素的值是什么？
+```cpp
+string sa[10];
+int ia[10];
+int main() {
+	string sa2[10];
+	int ia2[10];
+}
+```
+> 数组的元素会被默认初始化。`sa`的元素值全部为空字符串，`ia`的元素值全部为`0`。`sa2`的元素值全部为空字符串，`ia2`的元素值全部未定义。
+
+#### 练习3.29
+相比于`vector`来说，数组有哪些缺点，请列举一些。
+> 1. 数组的大小是确定的  
+> 2. 不能随意增加元素  
+> 3. 不允许拷贝和赋值  
+
+### 3.5.2 访问数组元素
+#### 练习3.30
+指出下面代码中的索引错误。
+```cpp
+constexpr size_t array_size = 10;
+int ia[array_size];
+for (size_t ix = 1; ix <= array_size; ++ix)
+	ia[ix] = ix;
+```
+
+当`ix`增长到`10`的时候，`ia[ix]`的下标越界。
+
+#### 练习3.31
+编写一段程序，定义一个含有`10`个`int`的数组，令每个元素的值就是其下标值。
+```cpp
+#include <iostream>
+using std::cout;
+using std::endl;
+
+int main()
+{
+    int a[10];
+    for (auto i = 0; i < 10; i++){
+        a[i] = i;
+        cout << a[i] << endl;
+    }
+    return 0;
+}
+```
+
+#### 练习3.32
+将上一题刚刚创建的数组拷贝给另一数组。利用`vector`重写程序，实现类似的功能。
+```cpp
+#include <iostream>
+#include <vector>
+using std::cout;
+using std::endl;
+using std::vector;
+
+int main()
+{
+    int a[10] = {0,1,2,3,4,5,6,7,8,9};
+    int b[10];
+    for (auto i = 0; i < 10; i++){
+        b[i] = a[i];
+    }
+    return 0;
+
+    //--------------------------------
+    vector<int> c(10);
+    for (auto j = 0; j < 10; j++)
+    {
+        c[j] = a[j];
+    }
+    vector<int> v2(c);
+}
+```
+
+#### 练习3.33
+对于104页的程序来说，如果不初始化`scores`将会发生什么？
+> 数组中所有元素的值将会未定义。
