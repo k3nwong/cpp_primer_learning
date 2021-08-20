@@ -1184,3 +1184,192 @@ int main()
 #### 练习3.33
 对于104页的程序来说，如果不初始化`scores`将会发生什么？
 > 数组中所有元素的值将会未定义。
+
+### 3.5.3 指针和数组
+## 练习3.34
+假定p1 和 p2 都指向同一个数组中的元素，则下面程序的功能是什么？什么情况下该程序是非法的？
+```cpp
+p1 += p2 - p1;
+```
+> 将 p1 移动到 p2 的位置。任何情况下都合法。
+
+#### 练习3.35
+编写一段程序，利用指针将数组中的元素置为0。
+```cpp
+#include <iostream>
+using std::cout; 
+using std::endl;
+
+int main()
+{
+	const int size = 10;
+	int arr[size];
+	for (auto ptr = arr; ptr != arr + size; ++ptr) 
+		*ptr = 0;
+
+	for (auto i : arr) cout << i << ", ";
+	cout << endl;
+
+	return 0;
+}
+```
+
+#### 练习3.36
+编写一段程序，比较两个数组是否相等。再写一段程序，比较两个vector对象是否相等。
+```cpp
+#include <iostream>
+#include <vector>
+#include <iterator>
+
+using namespace std;
+
+bool compare(int* const beg1, int* const end1, int* const beg2, int* const end2)
+{
+	if ((end1 - beg1) != (end2 - beg2)) 
+		return false;
+	else
+	{
+		for (int* i = beg1, *j = beg2; (i != end1) && (j != end2); ++i, ++j)
+			if (*i != *j)
+				return false;
+	}
+
+	return true;
+}
+
+int main()
+{
+	int arr1[3] = { 0, 1, 2 };
+	int arr2[3] = { 0, 2, 4 };
+
+	if (compare(begin(arr1), end(arr1), begin(arr2), end(arr2)))
+		cout << "The two arrays are equal." << endl;
+	else
+		cout << "The two arrays are not equal." << endl;
+
+
+	vector<int> vec1 = { 0, 1, 2 };
+	vector<int> vec2 = { 0, 1, 2 };
+
+	if (vec1 == vec2)
+		cout << "The two vectors are equal." << endl;
+	else
+		cout << "The two vectors are not equal." << endl;
+
+	return 0;
+}
+```
+
+### 3.5.4 C风格字符串
+#### 练习3.37
+下面的程序是何含义，程序的输出结果是什么？
+```cpp
+const char ca[] = { 'h', 'e', 'l', 'l', 'o' };
+const char *cp = ca;
+while (*cp) {
+    cout << *cp << endl;
+    ++cp;
+}
+```
+> 会将`ca`字符数组中的元素打印出来。但是因为没有空字符的存在，程序不会退出循环。
+
+#### 练习3.38
+在本节中我们提到，将两个指针相加不但是非法的，而且也没有什么意义。请问为什么两个指针相加没有意义？
+> 指针是用来代表内存地址的。指针的数值是该地址相对于最低位地址也就是0位地址的偏移量，也可称之为坐标。坐标相加得到的新值是没什么意义的，坐标相减则是距离，坐标加距离则是新坐标，后两者是有意义的。
+
+#### 练习3.39
+编写一段程序，比较两个string对象。再编写一段程序，比较两个C风格字符串的内容
+```cpp
+#include <iostream>
+#include <string>
+#include <cstring>
+using std::cout; 
+using std::endl; 
+using std::string;
+
+int main()
+{
+	string s1("aaaaaaaaaa"), s2("bbbbbbbbbb");
+	if (s1 == s2)
+		cout << "same string." << endl;
+	else if (s1 > s2)
+		cout << "aaaaaaaaaa > bbbbbbbbbb" << endl;
+	else
+		cout << "aaaaaaaaaa < bbbbbbbbbb" << endl;
+
+	const char* cs1 = "aaaaaaaaaa";
+	const char* cs2 = "bbbbbbbbbb";
+	auto result = strcmp(cs1, cs2);
+	if (result == 0)
+		cout << "same string." << endl;
+	else if (result < 0)
+		cout << "aaaaaaaaaa < bbbbbbbbbb" << endl;
+	else
+		cout << "aaaaaaaaaa > bbbbbbbbbb" << endl;
+
+	return 0;
+}
+```
+
+#### 练习3.40
+编写一段程序，定义两个字符数组并用字符串字面值初始化它们；接着再定义一个字符数组存放前面两个数组连接后的结果。使用strcpy和strcat把前两个数组的内容拷贝到第三个数组当中。
+```cpp
+#include <iostream>
+#include <cstring>
+
+const char cstr1[] = "Hello ";
+const char cstr2[] = "world!";
+
+int main()
+{
+	char cstr3[100];
+
+	strcpy(cstr3, cstr1);
+	strcat(cstr3, cstr2);
+
+	std::cout << cstr3 << std::endl;
+}
+```
+
+### 3.5.5 与旧代码的接口
+#### 练习3.41
+编写一段程序，用整型数组初始化一个`vector`对象
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int arr[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	vector<int> v(begin(arr), end(arr));
+
+	for (auto i : v) cout << i << " ";
+	cout << endl;
+
+	return 0;
+}
+```
+
+#### 练习3.42
+编写一段程序，将含有整数元素的`vector`对象拷贝给一个整型数组
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	vector<int> v{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	int arr[10];
+	for (int i = 0; i < v.size(); ++i) 
+		arr[i] = v[i];
+
+	for (auto i : arr) cout << i << " ";
+	cout << endl;
+
+	return 0;
+}
+```
