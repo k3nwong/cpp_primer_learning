@@ -1731,3 +1731,567 @@ unsigned long ul1 = 3, ul2 = 7;
 > (b) 7  
 > (c) true  
 > (d) ture  
+
+## 4.9 sizeof运算符
+#### 练习4.28
+编写一段程序，输出每一种内置类型所占空间的大小。
+```cpp
+#include <iostream> 
+using namespace std;
+
+int main()
+{
+	cout << "bool:\t\t" << sizeof(bool) << " bytes" << endl << endl;
+
+	cout << "char:\t\t" << sizeof(char) << " bytes" << endl;
+	cout << "wchar_t:\t" << sizeof(wchar_t) << " bytes" << endl;
+	cout << "char16_t:\t" << sizeof(char16_t) << " bytes" << endl;
+	cout << "char32_t:\t" << sizeof(char32_t) << " bytes" << endl << endl;
+
+	cout << "short:\t\t" << sizeof(short) << " bytes" << endl;
+	cout << "int:\t\t" << sizeof(int) << " bytes" << endl;
+	cout << "long:\t\t" << sizeof(long) << " bytes" << endl;
+	cout << "long long:\t" << sizeof(long long) << " bytes" << endl << endl;
+
+	cout << "float:\t\t" << sizeof(float) << " bytes" << endl;
+	cout << "double:\t\t" << sizeof(double) << " bytes" << endl;
+	cout << "long double:\t" << sizeof(long double) << " bytes" << endl << endl;
+
+	return 0;
+}
+```
+
+#### 练习4.29
+推断下面代码的输出结果并说明理由。实际运行这段程序，结果和你想象的一样吗？如不一样，为什么？
+```cpp
+int x[10];   int *p = x;
+cout << sizeof(x)/sizeof(*x) << endl;
+cout << sizeof(p)/sizeof(*p) << endl;
+```
+> 第一个输出结果是 10。第二个结果是未定义。
+
+#### 练习4.30
+根据4.12节中的表，在下述表达式的适当位置加上括号，使得加上括号之后的表达式的含义与原来的含义相同。
+```cpp
+(a) sizeof x + y      
+(b) sizeof p->mem[i]  
+(c) sizeof a < b     
+(d) sizeof f()  
+```
+> (a) (sizeof x) + y
+> (b) sizeof(p->mem[i])
+> (c) sizeof(a) < b
+> (d) sizeof(f())
+
+## 4.10 逗号运算符
+#### 练习4.31
+本节的程序使用了前置版本的递增运算符和递减运算符，解释为什么要用前置版本而不用后置版本。要想使用后置版本的递增递减运算符需要做哪些改动？使用后置版本重写本节的程序。
+> 在4.5节（132页）已经说过了，**除非必须，否则不用递增递减运算符的后置版本**。在这里要使用后者版本的递增递减运算符不需要任何改动。
+
+#### 练习4.32
+解释下面这个循环的含义。
+```cpp
+constexpr int size = 5;
+int ia[size] = { 1, 2, 3, 4, 5 };
+for (int *ptr = ia, ix = 0;
+    ix != size && ptr != ia+size;
+    ++ix, ++ptr) { /* ... */ }
+```  
+> 这个循环在遍历数组`ia`，指针`ptr`和整型`ix`都是起到一个循环计数的功能。
+
+#### 练习4.33
+根据4.12节中的表说明下面这条表达式的含义。
+```cpp
+someValue ? ++x, ++y : --x, --y
+```
+> 逗号表达式的优先级是最低的。因此这条表达式也等于：
+> ```cpp
+> (someValue ? ++x, ++y : --x), --y
+> ```
+> 如果`someValue`的值为真，`x`和`y`的值都自增并返回`y`值，然后丢弃`y`值，`y`递减并返回`y`值。如果`someValue`的值为假，`x`递减并返回`x`值，然后丢弃`x`值，`y`递减并返回`y`值。
+
+## 4.11 类型转换
+### 4.11.1 算术转换
+#### 练习4.34
+根据本节给出的变量定义，说明在下面的表达式中奖发生什么样的类型转换：
+```cpp
+(a) if (fval)
+(b) dval = fval + ival;
+(c) dval + ival * cval;
+```
+需要注意每种运算符遵循的是左结合律还是右结合律。
+
+> (a) `fval`转换为`bool`类型  
+> (b) `ival`转换为`float`，相加的结果转换为`double`  
+> (c) `cval`转换为`int`，然后相乘的结果转换为`double`
+
+#### 练习4.35
+假设有如下的定义：
+```cpp
+char cval;
+int ival;
+unsigned int ui;
+float fval;
+double dval;
+```
+请回答在下面的表达式中发生了隐式类型转换吗？如果有，指出来。
+```cpp
+(a) cval = 'a' + 3;
+(b) fval = ui - ival * 1.0;
+(c) dval = ui * fval;
+(d) cval = ival + fval + dval;
+```
+
+> (a) `'a'`转换为`int`，然后与`3`相加的结果转换为`char`  
+> (b) `ival`转换为`double``ui`转换为`double`，结果转换为`float`  
+> (c) `ui`转换为`float`，结果转换为`double`  
+> (d) `ival`转换为`float`，与`fval`相加后的结果转换为`double`，最后的结果转换为`char`
+
+### 4.11.3 显示转换
+#### 练习4.36
+假设`i`是`int`类型，`d`是`double`类型，书写表达式`i*=d`使其执行整数类型的乘法而非浮点类型的乘法。
+```cpp
+i *= static_cast<int>(d);
+```
+
+#### 练习4.37
+用命名的强制类型转换改写下列旧式的转换语句。
+```cpp
+int i; double d; const string *ps; char *pc; void *pv;
+(a) pv = (void*)ps;
+(b) i = int(*pc);
+(c) pv = &d;
+(d) pc = (char*)pv;
+```
+> (a) pv = static_cast<void*>(const_cast<string*>(ps));  
+> (b) i = static_cast<int>(*pc);  
+> (c) pv = static_cast<void*>(&d);  
+> (d) pc = static_cast<char*>(pv);
+
+#### 练习4.38
+说明下面这条表达式的含义。
+```cpp
+double slope = static_cast<double>(j/i);
+```
+> 将`j/i`的结果值转换为`double`，然后赋值给`slope`。 
+
+
+# 第五章 语句
+## 5.1 简单语句
+#### 练习5.1
+什么是空语句？什么时候会用到空语句？
+> - 只含义一个单独的分号的语句是空语句。  
+> - 如果在程序的某个地方，语法上需要一条语句但是逻辑上不需要，此时应该使用空语句。
+
+## 练习5.2
+什么是块？什么时候会用到块？
+> - 用花括号括起来的语句和声明的序列就是块。
+> - 如果在程序的某个地方，语法上需要一条语句，而逻辑上需要多条语句，此时应该使用块
+
+## 练习5.3
+使用逗号运算符重写1.4.1节的 while 循环，使它不再需要块，观察改写之后的代码可读性提高了还是降低了。
+```cpp
+while (val <= 10)
+    sum += val, ++val;
+```
+> 代码的可读性反而降低了。
+
+## 5.2 语句作用域
+#### 练习5.4
+说明下列例子的含义，如果存在问题，试着修改它。
+```cpp
+(a) while (string::iterator iter != s.end()) { /* . . . */ }
+(b) while (bool status = find(word)) { /* . . . */ }
+		if (!status) { /* . . . */ }
+```
+> (a) 这个循环试图用迭代器遍历`string`，但是变量的定义应该放在循环的外面，目前每次循环都会重新定义一个变量，明显是错误的。  
+> (b) 这个循环的`while`和`if`是两个独立的语句，`if`语句中无法访问`status`变量，正确的做法是应该将`if`语句包含在`while`里面。
+
+## 5.3 条件语句
+### 5.3.1 if语句
+#### 练习5.5
+写一段自己的程序，使用`if else`语句实现把数字转换为字母成绩的要求。
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+using std::vector; 
+using std::string; 
+using std::cout; 
+using std::endl; 
+
+int main()
+{
+	vector<string> scores = { "F", "D", "C", "B", "A", "A++" };
+	int g = 0;
+	while (cin >> g)
+	{
+		string letter;
+		if (g < 60)
+			letter = scores[0];
+		else
+		{
+			letter = scores[(g - 50) / 10];
+			if (g != 100)
+				letter += g % 10 > 7 ? "+" : g % 10 < 3 ? "-" : "";
+			cout << letter << endl;
+		}
+	}
+	return 0;
+}
+```
+
+#### 练习5.6
+改写上一题的程序，使用条件运算符代替`if else`语句。
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+using std::vector; 
+using std::string; 
+using std::cout; 
+using std::endl; 
+using std::cin;
+
+int main()
+{
+	vector<string> scores = { "F", "D", "C", "B", "A", "A++" };
+	int grade = 0;
+	while (cin >> grade)
+	{
+		string lettergrade = grade < 60 ? scores[0] : scores[(grade - 50) / 10];
+		lettergrade += (grade == 100 || grade < 60) ? "" : (grade % 10 > 7) ? "+" : (grade % 10 < 3) ? "-" : "";
+		cout << lettergrade << endl;
+	}
+	return 0;
+}
+```
+
+#### 练习5.7
+改写下列代码段中的错误。
+```cpp
+(a) if (ival1 != ival2) 
+		ival1 = ival2
+    else 
+    	ival1 = ival2 = 0;
+(b) if (ival < minval) 
+		minval = ival;
+    	occurs = 1;
+(c) if (int ival = get_value())
+    	cout << "ival = " << ival << endl;
+    if (!ival)
+    	cout << "ival = 0\n";
+(d) if (ival = 0)
+    	ival = get_value();
+```
+
+> (a) `ival1 = ival2` 后面少了分号。  
+> (b) 应该用花括号括起来。  
+> (c) `if (!ival)` 应该改为 `else`。  
+> (d) `if (ival = 0)` 应该改为 `if (ival == 0)`。  
+
+#### 练习5.8
+什么是“悬垂`else`”？C++语言是如何处理`else`子句的？
+> C++语言规定`else`与它最近的尚未匹配的`if`匹配。
+
+### 5.3.2 switch语句
+#### 练习5.9
+编写一段程序，使用一系列`if`语句统计从`cin`读入的文本中有多少元音字母。
+```cpp
+#include <iostream>
+using std::cout; 
+using std::endl; 
+using std::cin;
+
+int main()
+{
+	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0;
+	char ch;
+	while (cin >> ch)
+	{
+		if (ch == 'a') ++aCnt;
+		else if (ch == 'e') ++eCnt;
+		else if (ch == 'i') ++iCnt;
+		else if (ch == 'o') ++oCnt;
+		else if (ch == 'u') ++uCnt;
+	}
+	cout << "Number of vowel a: \t" << aCnt << '\n'
+		<< "Number of vowel e: \t" << eCnt << '\n'
+		<< "Number of vowel i: \t" << iCnt << '\n'
+		<< "Number of vowel o: \t" << oCnt << '\n'
+		<< "Number of vowel u: \t" << uCnt << endl;
+	return 0;
+}
+```
+
+#### 练习5.10
+我们之前实现的统计元音字母的程序存在一个问题：如果元音字母以大写形式出现，不会被统计在内。编写一段程序，既统计元音字母的小写形式，也统计元音字母的大写形式，也就是说，新程序遇到`'a'`和`'A'`都应该递增`aCnt`的值，以此类推。
+```cpp
+#include <iostream>
+using std::cin; 
+using std::cout; 
+using std::endl;
+int main()
+{
+	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0;
+	char ch;
+	while (cin >> ch)
+		switch (ch)
+	{
+		case 'a':
+		case 'A':
+			++aCnt;
+			break;
+		case 'e':
+		case 'E':
+			++eCnt;
+			break;
+		case 'i':
+		case 'I':
+			++iCnt;
+			break;
+		case 'o':
+		case 'O':
+			++oCnt;
+			break;
+		case 'u':
+		case 'U':
+			++uCnt;
+			break;
+	}
+	cout << "Number of vowel a(A): \t" << aCnt << '\n'
+		<< "Number of vowel e(E): \t" << eCnt << '\n'
+		<< "Number of vowel i(I): \t" << iCnt << '\n'
+		<< "Number of vowel o(O): \t" << oCnt << '\n'
+		<< "Number of vowel u(U): \t" << uCnt << endl;
+	return 0;
+}
+```
+
+#### 练习5.11
+修改统计元音字母的程序，使其也能统计空格、制表符、和换行符的数量。
+```cpp
+#include <iostream>
+using std::cin; 
+using std::cout; 
+using std::endl;
+
+int main()
+{
+	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0, spaceCnt = 0, tabCnt = 0, newLineCnt = 0;
+	char ch;
+	while (cin >> std::noskipws >> ch)//不忽略空白字符，将其读取
+		switch (ch)
+	{
+		case 'a':
+		case 'A':
+			++aCnt;
+			break;
+		case 'e':
+		case 'E':
+			++eCnt;
+			break;
+		case 'i':
+		case 'I':
+			++iCnt;
+			break;
+		case 'o':
+		case 'O':
+			++oCnt;
+			break;
+		case 'u':
+		case 'U':
+			++uCnt;
+			break;
+		case ' ':
+			++spaceCnt;
+			break;
+		case '\t':
+			++tabCnt;
+			break;
+		case '\n':
+			++newLineCnt;
+			break;
+	}
+	cout << "Number of vowel a(A): \t" << aCnt << '\n'
+		<< "Number of vowel e(E): \t" << eCnt << '\n'
+		<< "Number of vowel i(I): \t" << iCnt << '\n'
+		<< "Number of vowel o(O): \t" << oCnt << '\n'
+		<< "Number of vowel u(U): \t" << uCnt << '\n'
+		<< "Number of space: \t" << spaceCnt << '\n'
+		<< "Number of tab char: \t" << tabCnt << '\n'
+		<< "Number of new line: \t" << newLineCnt << endl;
+	return 0;
+}
+```
+
+#### 练习5.12
+修改统计元音字母的程序，使其能统计含以下两个字符的字符序列的数量： ff、fl和fi。
+```cpp
+#include <iostream>
+using std::cin; 
+using std::cout; 
+using std::endl;
+
+int main()
+{
+	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0, spaceCnt = 0, tabCnt = 0, newLineCnt = 0, ffCnt = 0, flCnt = 0, fiCnt = 0;
+	char ch, prech = '\0';
+	while (cin >> std::noskipws >> ch)
+	{
+		switch (ch)
+		{
+		case 'a':
+		case 'A':
+			++aCnt;
+			break;
+		case 'e':
+		case 'E':
+			++eCnt;
+			break;
+		case 'i':
+			if (prech == 'f') ++fiCnt;
+		case 'I':
+			++iCnt;
+			break;
+		case 'o':
+		case 'O':
+			++oCnt;
+			break;
+		case 'u':
+		case 'U':
+			++uCnt;
+			break;
+		case ' ':
+			++spaceCnt;
+			break;
+		case '\t':
+			++tabCnt;
+			break;
+		case '\n':
+			++newLineCnt;
+			break;
+		case 'f':
+			if (prech == 'f') ++ffCnt;
+			break;
+		case 'l':
+			if (prech == 'f') ++flCnt;
+			break;
+		}
+		prech = ch;
+	}
+	cout << "Number of vowel a(A): \t" << aCnt << '\n'
+		<< "Number of vowel e(E): \t" << eCnt << '\n'
+		<< "Number of vowel i(I): \t" << iCnt << '\n'
+		<< "Number of vowel o(O): \t" << oCnt << '\n'
+		<< "Number of vowel u(U): \t" << uCnt << '\n'
+		<< "Number of space: \t" << spaceCnt << '\n'
+		<< "Number of tab char: \t" << tabCnt << '\n'
+		<< "Number of new line: \t" << newLineCnt << '\n'
+		<< "Number of ff: \t" << ffCnt << '\n'
+		<< "Number of fl: \t" << flCnt << '\n'
+		<< "Number of fi: \t" << fiCnt << endl;
+	return 0;
+}
+```
+
+#### 练习5.13
+下面显示的每个程序都含有一个常见的编码错误，指出错误在哪里，然后修改它们。
+```cpp
+(a) unsigned aCnt = 0, eCnt = 0, iouCnt = 0;
+    char ch = next_text();
+    switch (ch) {
+        case 'a': aCnt++;
+        case 'e': eCnt++;
+        default: iouCnt++;
+    }
+(b) unsigned index = some_value();
+    switch (index) {
+        case 1:
+            int ix = get_value();
+            ivec[ ix ] = index;
+            break;
+        default:
+            ix = ivec.size()-1;
+            ivec[ ix ] = index;
+    }
+(c) unsigned evenCnt = 0, oddCnt = 0;
+    int digit = get_num() % 10;
+    switch (digit) {
+        case 1, 3, 5, 7, 9:
+            oddcnt++;
+            break;
+        case 2, 4, 6, 8, 10:
+            evencnt++;
+            break;
+    }
+(d) unsigned ival=512, jval=1024, kval=4096;
+    unsigned bufsize;
+    unsigned swt = get_bufCnt();
+    switch(swt) {
+        case ival:
+            bufsize = ival * sizeof(int);
+            break;
+        case jval:
+            bufsize = jval * sizeof(int);
+            break;
+        case kval:
+            bufsize = kval * sizeof(int);
+            break;
+    }
+```
+> (a) 少了`break`语句。应该为：
+```cpp
+	unsigned aCnt = 0, eCnt = 0, iouCnt = 0;
+    char ch = next_text();
+    switch (ch) {
+    	case 'a': aCnt++; break;
+    	case 'e': eCnt++; break;
+    	default: iouCnt++; break;
+    }
+```
+> (b) 在`default`分支当中，`ix`未定义。应该在外部定义ix。
+```cpp
+    unsigned index = some_value();
+    int ix;
+    switch (index) {
+        case 1:
+            ix = get_value();
+            ivec[ ix ] = index;
+            break;
+        default:
+            ix = static_cast<int>(ivec.size())-1;
+            ivec[ ix ] = index;
+    }
+```
+> (c)`case`后面应该用冒号而不是逗号。
+```cpp
+    unsigned evenCnt = 0, oddCnt = 0;
+    int digit = get_num() % 10;
+    switch (digit) {
+        case 1: case 3: case 5: case 7: case 9:
+            oddcnt++;
+            break;
+        case 2: case 4: case 6: case 8: case 0:
+            evencnt++;
+            break;
+    }
+```
+> (d) `case`标签必须是整型常量表达式。
+```cpp
+    const unsigned ival=512, jval=1024, kval=4096;
+    unsigned bufsize;
+    unsigned swt = get_bufCnt();
+    switch(swt) {
+        case ival:
+            bufsize = ival * sizeof(int);
+            break;
+        case jval:
+            bufsize = jval * sizeof(int);
+            break;
+        case kval:
+            bufsize = kval * sizeof(int);
+            break;
+    }
+```
+
