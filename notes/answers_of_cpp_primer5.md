@@ -2295,3 +2295,506 @@ int main()
     }
 ```
 
+## 5.4 迭代语句
+### 5.4.1 while语句
+#### 练习5.14
+编写一段程序，从标准输入中读取若干`string`对象并查找连续重复出现的单词，所谓连续重复出现的意思是：一个单词后面紧跟着这个单词本身。要求记录连续重复出现的最大次数以及对应的单词。如果这样的单词存在，输出重复出现的最大次数；如果不存在，输出一条信息说明任何单词都没有连续出现过。例如：如果输入是：`how now now now brown cow cow`
+那么输出应该表明单词`now`连续出现了`3`次。
+```cpp
+#include <iostream>
+#include <string>
+using std::cout;
+using std::cin; 
+using std::endl; 
+using std::string; 
+using std::pair;
+
+int main()
+{
+	pair<string, int> max_duplicated;
+	int count = 0;
+	for (string str, prestr; cin >> str; prestr = str)
+	{
+		if (str == prestr) 
+			++count;
+		else 
+			count = 0;
+		if (count > max_duplicated.second) 
+			max_duplicated = { prestr, count };
+	}
+
+	if (max_duplicated.first.empty()) 
+		cout << "There's no duplicated string." << endl;
+	else 
+		cout << "the word " << max_duplicated.first << " occurred " << max_duplicated.second + 1 << " times. " << endl;
+	return 0;
+}
+```
+
+### 5.4.2 传统的for语句
+#### 练习5.15
+说明下列循环的含义并改正其中的错误。
+```cpp
+(a) for (int ix = 0; ix != sz; ++ix) { /* ... */ }
+    if (ix != sz)
+    	// . . .
+(b) int ix;
+    for (ix != sz; ++ix) { /* ... */ }
+(c) for (int ix = 0; ix != sz; ++ix, ++sz) { /*...*/ }
+```
+> 应该改为下面这样：
+```cpp
+(a) int ix;
+    for (ix = 0; ix != sz; ++ix)  { /* ... */ }
+    if (ix != sz)
+    // . . .
+(b) int ix;
+    for (; ix != sz; ++ix) { /* ... */ }
+(c) for (int ix = 0; ix != sz; ++ix) { /*...*/ }
+```
+
+#### 练习5.16
+`while`循环特别适用于那种条件不变、反复执行操作的情况，例如，当未达到文件末尾时不断读取下一个值。`for`循环更像是在按步骤迭代，它的索引值在某个范围内一次变化。根据每种循环的习惯各自编写一段程序，然后分别用另一种循环改写。如果只能使用一种循环，你倾向于哪种？为什么？
+```cpp
+for (int i = 0; i != size; ++i)
+    // ...
+
+int i = 0;
+while (i != size)
+{
+    // ...
+    ++i;
+}
+```
+如果只能用一种循环，我会更倾向使用`for`，因为`for`循环的循环体在括号内更清晰直观。
+
+#### 练习5.17
+假设有两个包含整数的`vector`对象，编写一段程序，检验其中一个`vector`对象是否是另一个的前缀。为了实现这一目标，对于两个不等长的`vector`对象，只需挑出长度较短的那个，把它的所有元素和另一个`vector`对象比较即可。例如，如果两个`vector`对象的元素分别是`0、1、1、2`和`0、1、1、2、3、5、8`，则程序的返回结果为真。
+```cpp
+#include <iostream>
+#include <vector>
+using std::cout; 
+using std::vector;
+
+bool is_prefix(const vector<int>& lhs, const vector<int>& rhs)
+{
+	if (lhs.size() > rhs.size())
+		return is_prefix(rhs, lhs);
+	for (unsigned i = 0; i != lhs.size(); ++i)
+		if (lhs[i] != rhs[i]) 
+			return false;
+	return true;
+}
+
+int main()
+{
+	vector<int> l{ 0, 1, 1, 2 };
+	vector<int> r{ 0, 1, 1, 2, 3, 5, 8 };
+	cout << (is_prefix(r, l) ? "yes\n" : "no\n");
+	return 0;
+}
+```
+
+### 5.4.3 范围for语句
+
+### 5.4.4 do while语句
+#### 练习5.18
+说明下列循环的含义并改正其中的错误。
+```cpp
+(a) do { // 应该添加花括号
+        int v1, v2;
+        cout << "Please enter two numbers to sum:" ;
+        if (cin >> v1 >> v2)
+            cout << "Sum is: " << v1 + v2 << endl;
+    }while (cin);
+(b) int ival;
+    do {
+        // . . .
+    } while (ival = get_response()); // 应该将ival 定义在循环外
+(c) int ival = get_response();
+    do {
+        ival = get_response();
+    } while (ival); // 应该将ival 定义在循环外
+```
+
+#### 练习5.19
+编写一段程序，使用`do while`循环重复地执行下述任务：首先提示用户输入两个`string`对象，然后挑出较短的那个并输出它。
+```cpp
+#include <iostream>
+#include <string>
+using std::cout;
+using std::cin; 
+using std::endl; 
+using std::string;
+
+int main()
+{
+	string choice;
+	do
+	{
+		cout << "Input two strings: ";
+		string str1, str2;
+		cin >> str1 >> str2;
+		cout << (str1 <= str2 ? str1 : str2)
+			<< " is less than the other. " << "\n\n"
+			<< "More? Enter yes or no: ";
+		cin >> choice;
+	} while (tolower(choice[0]) == 'y');
+	return 0;
+}
+```
+
+## 5.5 跳转语句
+### 5.5.1 break语句
+#### 练习5.20
+编写一段程序，从标准输入中读取`string`对象的序列直到连续出现两个相同的单词或者所有的单词都读完为止。使用`while`循环一次读取一个单词，当一个单词连续出现两次时使用`break`语句终止循环。输出连续重复出现的单词，或者输出一个消息说明没有任何单词是连续重复出现的。
+```cpp
+#include <iostream>
+#include <string>
+using std::cout; using std::cin; using std::endl; using std::string;
+
+int main()
+{
+	string read, tmp;
+	while (cin >> read)
+		if (read == tmp) 
+			break; 
+		else 
+			tmp = read;
+
+	if (cin.eof())  
+		cout << "no word was repeated." << endl;
+	else            
+		cout << read << " occurs twice in succession." << endl;
+	return 0;
+}
+```
+
+### 5.5.2 continue语句
+#### 练习5.21
+修改5.5.1节练习题的程序，使其找到的重复单词必须以大写字母开头。
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	string curr, prev;
+	bool twice = false;
+	while (cin >> curr)
+	{
+		if (isupper(curr[0]) && prev == curr)
+		{
+			cout << curr << ": occurs twice in succession." << endl;
+			twice = true;
+			break;
+		}
+		prev = curr;
+	}
+	if (!twice)
+		cout << "no word was repeated." << endl;
+	return 0;
+}
+```
+
+### 5.5.3 goto语句
+#### 练习5.22
+本节的最后一个例子跳回到`begin`，其实使用循环能更好的完成该任务，重写这段代码，注意不再使用`goto`语句。
+```cpp
+for (int sz = get_size(); sz <=0; sz = get_size())
+    ;
+```
+
+## 5.6 try语句块和异常处理
+### 5.6.1 throw表达式
+
+### 5.6.2 try语句块
+
+### 5.6.3 标准异常
+#### 练习5.23
+编写一段程序，从标准输入读取两个整数，输出第一个数除以第二个数的结果。
+```cpp
+#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+
+int main()
+{
+	int i, j;
+	cin >> i >> j;
+	cout << i / j << endl;
+
+	return 0;
+}
+```
+
+
+#### 练习5.24
+修改你的程序，使得当第二个数是`0`时抛出异常。先不要设定`catch`子句，运行程序并真的为除数输入`0`，看看会发生什么？
+```cpp
+#include <iostream>
+#include <stdexcept>
+
+int main(void)
+{
+	int i, j;
+	std::cin >> i >> j;
+	if (j == 0)
+		throw std::runtime_error("divisor is 0");
+	std::cout << i / j << std::endl;
+
+	return 0;
+}
+```
+
+
+#### 练习5.25
+修改上一题的程序，使用`try`语句块去捕获异常。`catch`子句应该为用户输出一条提示信息，询问其是否输入新数并重新执行`try`语句块的内容。
+```cpp
+#include <iostream>
+#include <stdexcept>
+using std::cin;
+using std::cout; 
+using std::endl; 
+using std::runtime_error;
+
+int main()
+{
+	int i, j;
+	cout << "please input tow numbers: " << endl;
+	while (cin >> i >> j)
+	{
+		try
+		{
+			if (j == 0)
+				throw runtime_error("divisor is 0");
+			cout << i / j << endl;
+		}
+		catch (runtime_error err)
+		{
+			cout << err.what() << "\nTry Again? Enter y or n" << endl;
+			char c;
+			cin >> c;
+			if (c != 'y')
+				break;
+		}
+		cout << "please input tow numbers: " << endl;
+	}
+
+	return 0;
+}
+```
+
+
+
+# 第六章 函数
+## 6.1 函数基础
+#### 练习6.1
+实参和形参的区别的什么？
+> 实参是函数调用的实际值，是形参的初始值。
+
+#### 练习6.2
+请指出下列函数哪个有错误，为什么？应该如何修改这些错误呢？
+```cpp
+(a) int f() {
+          string s;
+          // ...
+          return s;
+    }
+(b) f2(int i) { /* ... */ }
+(c) int calc(int v1, int v1)  /* ... */ }
+(d) double square (double x)  return x * x; 
+```
+> 应该改为下面这样：
+```cpp
+(a) string f() {
+          string s;
+          // ...
+          return s;
+    }
+(b) void f2(int i) { /* ... */ }
+(c) int calc(int v1, int v2) { /* ... */ }
+(d) double square (double x) { return x * x; }
+```
+#### 练习6.3
+编写你自己的`fact`函数，上机检查是否正确。
+```cpp
+#include <iostream>
+int fact(int i)
+{
+	if (i > 1)
+		return 1;
+	else
+		return i * fact(i - 1);
+}
+int main()
+{
+	std::cout << fact(5) << std::endl;
+	return 0;
+}
+```
+
+#### 练习6.4
+编写一个与用户交互的函数，要求用户输入一个数字，计算生成该数字的阶乘。在`main`函数中调用该函数。
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+int fact(int i)
+{
+	if (i > 1)
+		return 1;
+	else
+		return i * fact(i - 1);
+}
+int main(){
+	string const prompt = "Enter a number :\n";
+	for (int i; cout << prompt, cin >> i;)
+	{
+		cout << fact(i) << endl;
+	}
+	return 0;
+}
+```
+
+#### 练习6.5
+编写一个函数输出其实参的绝对值。
+```cpp
+int abs(int i)
+{
+    return i > 0 ? i : -i;
+}
+```
+
+### 6.1.1 局部对象
+说明形参、局部变量以及局部静态变量的区别。编写一个函数，同时达到这三种形式。
+> 形参定义在函数形参列表里面  
+> 局部变量定义在代码块里面  
+> 局部静态变量在程序的执行路径第一次经过对象定义语句时初始化，并且直到程序终止时才被销毁。
+
+## 练习6.7
+编写一个函数，当它第一次被调用时返回`0`，以后每次被调用返回值加`1`。
+```cpp
+int ascending()
+{
+	static int num = 0;
+	return num++;
+}
+```
+
+### 6.1.2 函数声明
+#### 练习6.8
+编写一个名为`Chapter6.h`的头文件，令其包含6.1节练习中的函数。
+```cpp
+int fact(int val);
+int func();
+
+template <typename T>
+T abs(T i)
+{
+	return i >= 0 ? i : -i;
+}
+```
+
+### 6.1.3 分离式编译
+
+## 6.2参数传递
+### 6.2.1 传值参数
+#### 练习6.10
+编写一个函数，使用指针形参交换两个整数的值。在代码中调用该函数并输出交换后的结果，以此验证函数的正确性。
+```cpp
+#include <iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+
+void swap(int* a, int* b)
+{
+	int tmp;
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+int main()
+{
+	int a, b;
+	cout << "Please enter the numbers: \n";
+	cin >> a >> b;
+
+	swap(&a, &b)
+	cout << a << " " << b << endl;
+
+	return 0;
+}
+```
+
+### 6.2.2 传引用参数
+#### 练习6.11]
+编写并验证你自己的reset函数，使其作用于引用类型的参数。
+```cpp
+void reset(int &i)
+{
+	i = 0;
+}
+```
+
+#### 练习6.12
+改写6.2.1节练习中的程序，使其引用而非指针交换两个整数的值。你觉得哪种方法更易于使用呢？为什么？
+```cpp
+void swap(int& a, int& b)
+{
+	int tmp;
+	tmp = a;
+	a = b;
+	b = tmp;
+}
+
+int main()
+{
+	int a, b;
+	cout << "Please enter the numbers: \n";
+	cin >> a >> b;
+
+	swap(a, b)
+	cout << a << " " << b << endl;
+
+	return 0;
+}
+```
+> 引用更好。
+
+#### 练习6.13
+假设`T`是某种类型的名字，说明以下两个函数声明的区别：一个是`void f(T)`, 另一个是`void f(&T)`。
+> `void f(T)`的参数通过值传递，在函数中`T`是实参的拷贝，改变`T`不会影响到原来的实参。  
+> `void f(&T)`的参数通过引用传递，在函数中的`T`是实参的引用，`T`的改变也就是实参的改变。
+
+## 练习6.14
+举一个形参应该是引用类型的例子，再举一个形参不能是引用类型的例子。
+> 例如交换两个整数的函数，形参应该是引用
+```cpp
+void swap(int& lhs, int& rhs)
+{
+	int temp = lhs;
+	lhs = rhs;
+	rhs = temp;
+}
+```
+> 当实参的值是右值时，形参不能为引用类型
+```cpp
+int add(int a, int b)
+{
+	return a + b;
+}
+```
+
+## 练习6.15
+说明`find_char`函数中的三个形参为什么是现在的类型，特别说明为什么`s`是常量引用而`occurs`是普通引用？为什么`s`和`occurs`是引用类型而`c`不是？如果令`s`是普通引用会发生什么情况？如果令`occurs`是常量引用会发生什么情况？
+> 因为字符串可能很长，因此使用引用避免拷贝；而在函数中我们不希望改变`s`的内容，所以令`s`为常量。  
+> `occurs`是要传到函数外部的变量，所以使用引用，`occurs`的值会改变，所以是普通引用。
+> 因为我们只需要`c`的值，这个实参可能是右值(右值实参无法用于引用形参)，所以`c`不能用引用类型。
+> 如果`s`是普通引用，也可能会意外改变原来字符串的内容。
+> `occurs`如果是常量引用，那么意味着不能改变它的值，那也就失去意义了。
