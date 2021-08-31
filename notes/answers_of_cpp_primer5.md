@@ -3092,3 +3092,255 @@ decltype(odd)& arrPtr(int i)
 > - (a) 非法。因为顶层const 不影响传入函数的对象，所以第二个声明无法与第一个声明区分开来。
 > - (b) 非法。对于重载的函数来说，它们应该只有形参的数量和形参的类型不同。返回值与重载无关。
 > - (c) 合法。
+
+### 6.5.1 默认实参
+#### 练习6.40
+下面的哪个声明是错误的？为什么?
+```cpp
+(a) int ff(int a, int b = 0, int c = 0);
+(b) char *init(int ht = 24, int wd, char backgrnd);
+```
+> (b)的声明是错误的，因为一旦某个形参被赋予了默认值，那么它之后的形参都必须要有默认值。
+
+#### 练习6.41
+下面的哪个调用是非法的？为什么？哪个调用虽然合法但显然与程序员的初衷不符？为什么？
+```cpp
+char *init(int ht, int wd = 80, char bckgrnd = ' ');
+(a) init();
+(b) init(24,10);
+(c) init(14,'*');
+```
+
+> - (a) 非法。第一个参数不是默认参数，最少需要一个实参。
+* (b) 合法。
+* (c) 合法，但与初衷不符。字符 `*` 被解释成 `int` 传入到了第二个参数。而初衷是要传给第三个参数。
+
+#### 练习6.42
+给`make_plural`函数的第二个形参赋予默认实参`'s'`, 利用新版本的函数输出单词`success`和`failure`的单数和复数形式。
+```cpp
+#include <iostream>
+#include <string>
+using std::string;
+using std::cout;
+using std::endl;
+
+string make_plural(size_t ctr, const string& word, const string& ending = "s")
+{
+	return (ctr > 1) ? word + ending : word;
+}
+
+int main()
+{
+	cout << "singual: " << make_plural(1, "success", "es") << " "
+		<< make_plural(1, "failure") << endl;
+	cout << "plural : " << make_plural(2, "success", "es") << " "
+		<< make_plural(2, "failure") << endl;
+
+	return 0;
+}
+```
+
+### 6.5.2 内联函数和constexpr函数
+#### 练习6.43 
+你会把下面的哪个声明和定义放在头文件？哪个放在源文件中？为什么？
+```cpp
+(a) inline bool eq(const BigInt&, const BigInt&) { ... }
+(b) void putValues(int *arr, int size);
+```
+> 全部都放进头文件。(a) 是内联函数，(b) 是声明。
+
+#### 练习6.44
+将6.22节（第189页）的`isShorter`函数改写成内联函数。
+```cpp
+inline bool is_shorter(const string &lft, const string &rht) 
+{
+    return lft.size() < rht.size();
+}
+```
+
+#### 练习6.45
+回顾在前面的练习中你编写的那些函数，它们应该是内联函数吗？如果是，将它们改写成内联函数；如果不是，说明原因。
+
+
+#### 练习6.46
+能把`isShorter`函数定义成`constexpr`函数吗？如果能，将它改写成`constexpr`函数；如果不能，说明原因。
+> 不能。`constexpr`函数的返回值类型及所有形参都得是字面值类型。
+
+### 6.5.3 调试帮助
+#### 练习6.47
+改写6.3.2（第205页）练习中使用递归输出`vector`内容的程序，使其有条件地输出与执行过程有关的信息。例如，每次调用时输出`vector`对象的大小。分别在打开和关闭调试器的情况下编译并执行这个程序。
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+using c_iter = vector<int>::const_iterator;
+#define NDEBUG
+
+void print(c_iter first, c_iter last)
+{
+#ifndef NDEBUG
+	cout << "vector size: " << last - first << endl;
+#endif
+	if (first == last)
+	{
+		cout << "over!" << endl;
+		return;
+	}
+	cout << *first << " ";
+	print(++first, last);
+
+}
+int main()
+{
+	vector<int> vec{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	print(vec.cbegin(), vec.cend());
+	return 0;
+}
+```
+
+#### 练习6.48
+说明下面这个循环的含义，他对`assert`的使用合理吗？
+```cpp
+string s;
+while (cin >> s && s != sought) {} //空函数体
+assert(cin);
+```
+> 不合理。从这个程序的意图来看，应该用 
+> ```cpp
+> assert(s == sought);
+> ```
+
+## 6.6 函数匹配
+#### 练习6.49 
+什么是候选函数？什么是可行函数？
+> - 候选函数：与被调用函数同名，并且其声明在调用点可见。
+> - 可行函数：形参与实参的数量相等，并且每个实参类型与对应的形参类型相同或者能转换成形参的类型。
+
+#### 练习6.50
+已知有第217页对函数`f`的声明，对于下面的每一个调用列出可行函数。其中哪个函数是最佳匹配？如果调用不合法，是因为没有可匹配的函数还是因为调用具有二义性？
+```cpp
+(a) f(2.56, 42)
+(b) f(42)
+(c) f(42, 0)
+(d) f(2.56, 3.14)
+```
+> - (a) `void f(int, int);` 和 `void f(double, double = 3.14);` 是可行函数。该调用具有二义性而不合法。
+> - (b) `void f(int);` 是可行函数。调用合法。
+> - (c) `void f(int, int);` 和 `void f(double, double = 3.14);` 是可行函数。`void f(int, int);` 是最佳匹配。
+> - (d) `void f(int, int);` 和 `void f(double, double = 3.14);` 是可行函数。`void f(double, double = 3.14);` 是最佳匹配。
+
+#### 练习6.51
+编写函数`f`的4个版本，令其各输出一条可以区分的消息。验证上一个练习的答案，如果你的回答错了，反复研究本节内容直到你弄清自己错在何处。
+```cpp
+#include <iostream>
+using std::cout;
+using std::endl;
+
+void f()
+{
+	cout << "f()" << endl;
+}
+
+void f(int)
+{
+	cout << "f(int)" << endl;
+}
+
+void f(int, int)
+{
+	cout << "f(int, int)" << endl;
+}
+
+void f(double, double)
+{
+	cout << "f(double, double)" << endl;
+}
+
+int main()
+{
+	//f(2.56, 42);
+	f(42);
+	f(42, 0);
+	f(2.56, 3.14);
+
+	return 0;
+}
+```
+
+### 6.6.1 实参类型转换
+#### 练习6.52
+```cpp
+void manip(int, int);
+double dobj;
+```
+请指出下列调用中每个类型转换的等级（参见6.6.1节，第219页）
+```cpp
+(a) manip('a', 'z');
+(b) manip(55.4, dobj);
+```
+> - (a) 第3级。类型提升实现的匹配。
+> - (b) 第4级。算术类型转换实现的匹配。
+
+#### 练习6.53
+说明下列每组声明中的第二条语句会产生声明影响，并指出哪些不合法（如果有的话）。
+```cpp
+(a) int calc(int&, int&);
+	int calc(const int&, const int&);
+(b) int calc(char*, char*)
+    int calc(const char*, const char*);
+(c) int calc(char*, char*)
+    int calc(char* const, char* const);
+```
+> (c) 不合法。顶层`const`不影响传入函数的对象。
+
+## 6.7 函数指针
+#### 练习6.54
+编写函数的声明，令其接受两个`int`形参并返回类型也是`int`；然后声明一个`vector`对象，令其元素是指向该函数的指针。
+```cpp
+int func(int, int);
+vector<decltype(func)*> v;
+```
+
+## 练习6.55
+编写4个函数，分别对两个`int`值执行加、减、乘、除运算；在上一题创建的`vector`对象中保存指向这些函数的指针。
+```cpp
+int add(int a, int b) { return a + b; }
+int subtract(int a, int b) { return a - b; }
+int multiply(int a, int b) { return a * b; }
+int divide(int a, int b) { return b != 0 ? a / b : 0; }
+
+v.push_back(add);
+v.push_back(subtract);
+v.push_back(multiply);
+v.push_back(divide);
+```
+
+#### 练习6.56
+调用上述`vector`对象中的每个元素并输出结果。
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int add(int a, int b) { return a + b; }
+int subtract(int a, int b) { return a - b; }
+int multiply(int a, int b) { return a * b; }
+int divide(int a, int b) { return b != 0 ? a / b : 0; }
+
+int main()
+{
+	int func(int, int);
+	vector<decltype(func)*> v;
+	v.push_back(add);
+	v.push_back(subtract);
+	v.push_back(multiply);
+	v.push_back(divide);
+	
+	for (auto i : v)
+	{
+		cout << i(6, 2) << " "; 
+	}
+	cout << endl;
+	return 0;
+}
+```
