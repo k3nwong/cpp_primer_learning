@@ -2798,3 +2798,297 @@ int add(int a, int b)
 > 因为我们只需要`c`的值，这个实参可能是右值(右值实参无法用于引用形参)，所以`c`不能用引用类型。
 > 如果`s`是普通引用，也可能会意外改变原来字符串的内容。
 > `occurs`如果是常量引用，那么意味着不能改变它的值，那也就失去意义了。
+
+### 6.2.3 const形参和实参
+#### 练习6.16
+下面的这个函数虽然合法，但是不算特别有用。指出它的局限性并设法改善。
+```cpp
+bool is_empty(string& s) { return s.empty(); }
+```
+> 局限性在于**常量字符串**和**字符串字面值**无法作为该函数的实参，如果下面这样调用是非法的：
+```cpp
+const string str;
+bool flag = is_empty(str); //非法
+bool flag = is_empty("hello"); //非法
+```
+> 所以要将这个函数的形参定义为常量引用：
+```cpp
+bool is_empty(const string& s) { return s.empty(); }
+```
+
+#### 练习6.17
+编写一个函数，判断`string`对象中是否含有大写字母。编写另一个函数，把`string`对象全部改写成小写形式。在这两个函数中你使用的形参类型相同吗？为什么？
+> 两个函数的形参不一样。第一个函数使用常量引用，第二个函数使用普通引用。
+> ```cpp
+> bool any_capital(string const& str)
+> {
+> 	for (auto ch : str)
+> 		if (isupper(ch)) return true;
+> 	return false;
+> }
+> void to_lowercase(string& str)
+> {
+> 	for (auto& ch : str) ch = tolower(ch);
+> }
+> ```
+
+#### 练习6.18
+为下面的函数编写函数声明，从给定的名字中推测函数具备的功能。
+- (a) 名为`compare`的函数，返回布尔值，两个参数都是`matrix`类的引用。 
+- (b) 名为`change_val`的函数，返回`vector<int>`的迭代器，有两个参数：一个是`int`，另一个是`vector<int>`的迭代器。
+```cpp
+(a) bool compare(matrix &m1, matrix &m2);
+(b) vector<int>::iterator change_val(int, vector<int>::iterator);
+```
+
+## 练习6.19
+假定有如下声明，判断哪个调用合法、哪个调用不合法。对于不合法的函数调用，说明原因。
+```cpp
+double calc(double);
+int count(const string &, char);
+int sum(vector<int>::iterator, vector<int>::iterator, int);
+vector<int> vec(10);
+(a) calc(23.4, 55.1);
+(b) count("abcda",'a');
+(c) calc(66);
+(d) sum(vec.begin(), vec.end(), 3.8);
+```
+> - (a) 不合法。calc只有一个参数。
+> - (b) 合法。
+> - (c) 合法。
+> - (d) 合法。
+
+## 练习6.20
+引用形参什么时候应该是常量引用？如果形参应该是常量引用，而我们将其设为了普通引用，会发生什么情况？
+> 应该尽量将引用形参设为常量引用，除非有明确的目的是为了改变这个引用变量。如果形参应该是常量引用，而我们将其设为了普通引用，那么常量实参将无法作用于普通引用形参。
+
+
+### 6.2.4 数组形参
+#### 练习6.21
+编写一个函数，令其接受两个参数：一个是`int`型的数，另一个是`int`指针。函数比较`int`的值和指针所指的值，返回较大的那个。在该函数中指针的类型应该是什么？
+> 应该是 `const int *` 类型。
+> ```cpp
+> #include <iostream>
+> using std::cout;
+> 
+> int larger_one(int i, const int *p)
+> {
+> 	 return (i > *p) ? i : *p;
+> }
+> int main()
+> {
+> 	 int i = 6;
+> 	 cout << larger_one(7, &i);
+> 	 return 0;
+> }
+> ```
+
+#### 练习6.22
+编写一个函数，令其交换两个`int`指针。
+```cpp
+#include <iostream>
+#include <string>
+void swap(int*& lft, int*& rht)
+{
+	auto tmp = lft;
+	lft = rht;
+	rht = tmp;
+}
+int main()
+{
+	int i = 42, j = 99;
+	auto lft = &i;
+	auto rht = &j;
+	swap(lft, rht);
+	std::cout << *lft << " " << *rht << std::endl;
+	return 0;
+}
+```
+
+#### 练习6.23
+参考本节介绍的几个`print`函数，根据理解编写你自己的版本。依次调用每个函数使其输入下面定义的`i`和`j`:
+```cpp
+int i = 0, j[2] = { 0, 1 };
+```
+```cpp
+#include <iostream>
+using std::cout; using std::endl; using std::begin; using std::end;
+
+void print(int i)
+{
+	cout << i << endl;
+}
+
+void print(const int *beg, const int *end)
+{
+	while (beg != end)
+		cout << *beg++ << endl;
+}
+
+void print(const int ia[], size_t size)
+{
+	for (size_t i = 0; i != size; ++i)
+	{
+		cout << ia[i] << endl;
+	}
+}
+
+void print(int (&arr)[2])
+{
+	for (auto i : arr)
+		cout << i << endl;
+}
+
+int main()
+{
+	int i = 0, j[2] = { 0, 1 };
+
+	print(i);
+	print(begin(j), end(j));
+	print(j, end(j) - begin(j));
+	print(j);
+
+	return 0;
+}
+```
+
+## 练习6.24
+描述下面这个函数的行为。如果代码中存在问题，请指出并改正。
+```cpp
+void print(const int ia[10])
+{
+	for (size_t i = 0; i != 10; ++i)
+		cout << ia[i] << endl;
+}
+```
+> 当数组作为实参的时候，会被自动转换为指向首元素的指针。因此函数形参接受的是一个指针。如果要让这个代码成功运行，可以将实参改为数组的引用。
+```cpp
+void print(const int (&ia)[10])
+{
+	for (size_t i = 0; i != 10; ++i)
+		cout << ia[i] << endl;
+}
+```
+
+### 6.2.5 main：处理命令行选项
+#### 练习6.25
+编写一个`main`函数，令其接收两个实参。把实参的内容连接成一个`string`对象并输出出来。
+```cpp
+#include <iostream>
+#include <string>
+using std::cout;
+using std::string;
+using std::endl;
+
+int main(int argc, char const *argv[])
+{
+    string s;
+    for (int i = 1; i != argc; ++i)
+		s += string(argv[i]) + " ";
+    cout << s;
+    return 0;
+}
+
+```
+
+#### 练习6.26
+编写一个程序，使其接收本节所示的选项；输出传递给`main`函数的实参的内容。
+> 同上
+
+### 6.2.6 含有可变形参的函数
+#### 练习6.27
+编写一个函数，它的参数是`initializer_list<int>`类型的对象，函数的功能是计算列表中所有元素的和。
+```cpp
+#include <iostream>
+#include <initializer_list>
+
+int sum(std::initializer_list<int> const& il)
+{
+	int sum = 0;
+	for (auto i : il) 
+		sum += i;
+	return sum;
+}
+int main(void)
+{
+	auto il = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	std::cout << sum(il) << std::endl;
+
+	return 0;
+}
+```
+
+## 练习6.28
+在`error_msg`函数的第二个版本中包含`ErrCode`类型的参数，其中循环内的`elem`是什么类型？
+> `elem` 是 `const string &` 类型。
+
+## 练习6.29
+在范围`for`循环中使用`initializer_list`对象时，应该将循环控制变量声明成引用类型吗？为什么？
+> 应该使用**常量引用**类型。`initializer_list` 对象中的元素都是常量，我们无法修改`initializer_list` 对象中的元素的值。
+
+### 6.3.2 有返回值函数
+## 练习6.30
+编译第200页的`str_subrange`函数，看看你的编译器是如何处理函数中的错误的。
+> `error: return-statement with no value, in function returning 'bool' [-fpermissive]`
+
+## 练习6.31
+什么情况下返回的引用无效？什么情况下返回常量的引用无效？
+> 当返回的引用的对象是局部变量时，返回的引用无效；当我们希望返回的对象被修改时，返回常量的引用无效。
+
+## 练习6.32
+
+> 下面的函数合法吗？如果合法，说明其功能；如果不合法，修改其中的错误并解释原因。
+```cpp
+int &get(int *array, int index) { return array[index]; }
+int main()
+{
+    int ia[10];
+    for (int i = 0; i != 10; ++i)
+        get(ia, i) = i;
+}
+```
+> 合法。`get`函数根据索引取得数组中的元素的引用。
+
+### 6.3.3 返回数组指针
+#### 练习6.36
+编写一个函数声明，使其返回数组的引用并且该数组包含10个`string`对象。不用使用尾置返回类型、`decltype`或者类型别名。
+```cpp
+string (&fun())[10];
+```
+
+#### 练习6.37
+为上一题的函数再写三个声明，一个使用类型别名，另一个使用尾置返回类型，最后一个使用`decltype`关键字。你觉得哪种形式最好？为什么？
+```cpp
+typedef string str_arr[10];
+str_arr& fun();
+
+auto fun()->string(&)[10];
+
+string s[10];
+decltype(s)& fun();
+```
+> 我觉得尾置返回类型最好。
+
+#### 练习6.38
+修改`arrPtr`函数，使其返回数组的引用。
+```cpp
+decltype(odd)& arrPtr(int i)
+{
+    return (i % 2) ? odd : even;
+}
+```
+
+## 6.4 函数重载
+#### 练习6.39 
+说明在下面的每组声明中第二条声明语句是何含义。如果有非法的声明，请指出来。
+```cpp
+(a) int calc(int, int);
+    int calc(const int, const int);
+(b) int get();
+    double get();
+(c) int *reset(int *);
+    double *reset(double *)
+```
+> - (a) 非法。因为顶层const 不影响传入函数的对象，所以第二个声明无法与第一个声明区分开来。
+> - (b) 非法。对于重载的函数来说，它们应该只有形参的数量和形参的类型不同。返回值与重载无关。
+> - (c) 合法。
