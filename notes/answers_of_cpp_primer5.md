@@ -614,16 +614,16 @@ cout << s[0] << endl;
 
 #### 练习3.10
 编写一段程序，读入一个包含标点符号的字符串，将标点符号去除后输出字符串剩余的部分。
-```cpp
-string s, result;
-for (auto x : s)
-	{
-		if (!ispunct(x))
-		{
-			result += x;
-		}
-	}
-```
+> ```cpp
+> string s, result;
+> for (auto x : s)
+> 	{
+> 		if (!ispunct(x))
+> 		{
+> 			result += x;
+> 		}
+> 	}
+> ```
 
 #### 练习3.11
 下面的范围for语句合法吗？如果合法，c的类型是什么？
@@ -631,8 +631,7 @@ for (auto x : s)
 const string s = "Keep out!";
 for(auto &c : s){ /* ... */ }
 ```
-
-> 要根据for循环中的代码来看是否合法，c是string 对象中字符的引用，s是常量。因此如果for循环中的代码重新给c赋值就会非法，如果不改变c的值，那么合法。
+> 要根据`for`循环中的代码来看是否合法，`c`是`string`对象中字符的引用，`s`是常量。因此如果`for`循环中的代码重新给`c`赋值就会非法，如果不改变`c`的值，那么合法。
 
 
 ## 3.3 标准库类型vector
@@ -668,175 +667,174 @@ for(auto &c : s){ /* ... */ }
 ### 3.3.2 向vector对象中添加元素
 #### 练习3.14
 编写一段程序，用cin读入一组整数并把它们存入一个vector对象。
-```cpp
-#include <iostream>
-#include <vector>
-using std::vector;
-using std::cin;
-using std::cout;
-using std::endl;
-
-int main()
-{
-	vector<int> v;
-	int i;
-	while (cin >> i)
-	{
-		v.push_back(i);
-	}
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> using std::vector;
+> using std::cin;
+> using std::cout;
+> using std::endl;
+> 
+> int main()
+> {
+>  	vector<int> v;
+> 	int i;
+> 	while (cin >> i)
+> 	{
+> 		v.push_back(i);
+> 	}
+> 	return 0;
+> }
+> ```
 
 #### 练习3.15
 改写上题程序，不过这次读入的是字符串。
-```cpp
-#include <iostream>
-#include <vector>
-#include <string>
-#include <cctype>
-using std::vector;
-using std::string;
-using std::cin;
-using std::cout;
-using std::endl;
-
-int main()
-{
-	vector<string> v;
-	string i;
-	while (cin >> i)
-	{
-		v.push_back(i);
-	}
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> #include <string>
+> #include <cctype>
+> using std::vector;
+> using std::string;
+> using std::cin;
+> using std::cout;
+> using std::endl;
+> 
+> int main()
+> {
+> 	vector<string> v;
+> 	string i;
+> 	while (cin >> i)
+> 	{
+> 		v.push_back(i);
+> 	}
+> 	return 0;
+> }
+> ```
 
 ### 3.3.3 其他vector操作
 #### 练习3.16
 编写一段程序，把练习3.13中`vector`对象的容量和具体内容输出出来
-```cpp
-#include <iostream>
-#include <string>
-#include <cctype>
-#include <vector>
-
-using std::cin;
-using std::cout;
-using std::endl;
-using std::vector;
-using std::string;
-
-int main()
-{
-	vector<int> v1;     
-	vector<int> v2(10);    
-	vector<int> v3(10, 42); 
-	vector<int> v4{ 10 };    
-	vector<int> v5{ 10, 42 }; 
-	vector<string> v6{ 10 };  
-	vector<string> v7{ 10, "hi" }; 
-
-	cout << "v1 size :" << v1.size() << endl;
-	cout << "v2 size :" << v2.size() << endl;
-	cout << "v3 size :" << v3.size() << endl;
-	cout << "v4 size :" << v4.size() << endl;
-	cout << "v5 size :" << v5.size() << endl;
-	cout << "v6 size :" << v6.size() << endl;
-	cout << "v7 size :" << v7.size() << endl;
-
-	cout << "v1 content: ";
-	for (auto i : v1)
-	{
-		cout << i << " , ";
-	}
-	cout << endl;
-
-	cout << "v2 content: ";
-	for (auto i : v2)
-	{
-		cout << i << " , ";
-	}
-	cout << endl;
-
-	cout << "v3 content: ";
-	for (auto i : v3)
-	{
-		cout << i << " , ";
-	}
-	cout << endl;
-
-	cout << "v4 content: ";
-	for (auto i : v4)
-	{
-		cout << i << " , ";
-	}
-	cout << endl;
-
-	cout << "v5 content: ";
-	for (auto i : v5)
-	{
-		cout << i << " , ";
-	}
-	cout << endl;
-
-	cout << "v6 content: ";
-	for (auto i : v6)
-	{
-		cout << i << " , ";
-	}
-	cout << endl;
-
-	cout << "v7 content: ";
-	for (auto i : v7)
-	{
-		cout << i << " , ";
-	}
-	cout << endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> #include <cctype>
+> #include <vector>
+> using std::cin;
+> using std::cout;
+> using std::endl;
+> using std::vector;
+> using std::string;
+> 
+> int main()
+> {
+> 	vector<int> v1;     
+> 	vector<int> v2(10);    
+> 	vector<int> v3(10, 42); 
+> 	vector<int> v4{ 10 };    
+> 	vector<int> v5{ 10, 42 }; 
+> 	vector<string> v6{ 10 };  
+> 	vector<string> v7{ 10, "hi" }; 
+> 
+> 	cout << "v1 size :" << v1.size() << endl;
+> 	cout << "v2 size :" << v2.size() << endl;
+> 	cout << "v3 size :" << v3.size() << endl;
+> 	cout << "v4 size :" << v4.size() << endl;
+> 	cout << "v5 size :" << v5.size() << endl;
+> 	cout << "v6 size :" << v6.size() << endl;
+> 	cout << "v7 size :" << v7.size() << endl;
+> 
+> 	cout << "v1 content: ";
+>	for (auto i : v1)
+>	{
+>		cout << i << " , ";
+>	}
+>	cout << endl;
+>
+>	cout << "v2 content: ";
+>	for (auto i : v2)
+>	{
+>		cout << i << " , ";
+>	}
+>	cout << endl;
+>
+>	cout << "v3 content: ";
+>	for (auto i : v3)
+>	{
+>		cout << i << " , ";
+>	}
+>	cout << endl;
+>
+>	cout << "v4 content: ";
+>	for (auto i : v4)
+>	{
+>		cout << i << " , ";
+>	}
+>	cout << endl;
+>
+>	cout << "v5 content: ";
+>	for (auto i : v5)
+>	{
+>		cout << i << " , ";
+>	}
+>	cout << endl;
+>
+>	cout << "v6 content: ";
+>	for (auto i : v6)
+>	{
+>		cout << i << " , ";
+>	}
+>	cout << endl;
+>
+>	cout << "v7 content: ";
+>	for (auto i : v7)
+>	{
+>		cout << i << " , ";
+>	}
+>	cout << endl;
+>	return 0;
+> }
+> ```
 
 #### 练习3.17
 从`cin`读入一组词并把它们存入一个`vector`对象，然后设法把所有词都改为大写形式。输出改变后的结果，每个词占一行。
-```cpp
-#include <iostream>
-#include <string>
-#include <cctype>
-#include <vector>
-
-using std::cin;
-using std::cout;
-using std::endl;
-using std::vector;
-using std::string;
-
-int main()
-{
-	vector<string> v;
-	string s;
-
-	while (cin >> s)
-	{
-		v.push_back(s);
-	}
-
-	for (auto &str : v)
-	{
-		for (auto &c : str)
-		{
-			c = toupper(c);
-		}
-	}
-
-	for (auto i : v)
-	{
-		cout << i << endl;
-	}
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> #include <cctype>
+> #include <vector>
+>
+> using std::cin;
+> using std::cout;
+> using std::endl;
+> using std::vector;
+> using std::string;
+>
+> int main()
+> {
+>	vector<string> v;
+>	string s;
+>
+>	while (cin >> s)
+>	{
+>		v.push_back(s);
+>	}
+>
+>	for (auto &str : v)
+>	{
+>		for (auto &c : str)
+>		{
+>			c = toupper(c);
+>		}
+>	}
+>
+>	for (auto i : v)
+>	{
+>		cout << i << endl;
+>	}
+>	return 0;
+> }
+> ```
 
 #### 练习3.18
 下面的程序合法吗？如果不合法，你准备如何修改？
@@ -844,7 +842,6 @@ int main()
 vector<int> ivec;
 ivec[0] = 42;
 ```
-
 > 不合法，不能对空`vector`进行下标赋值操作。应改为：
 > ```cpp
 > ivec.push_back(42);
@@ -860,231 +857,224 @@ ivec[0] = 42;
 > for (int i = 0; i < 10; ++i)
 > 	ivec3.push_back(42);
 > ```
-第一种方式最好。
+> 第一种方式最好。
 
 #### 练习3.20
 读入一组整数并把他们存入一个`vector`对象，将每对相邻整数的和输出出来。改写你的程序，这次要求先输出第一个和最后一个元素的和，接着输入第二个和倒数第二个元素的和，以此类推。
-```cpp
-#include <iostream>
-#include <vector>
-
-using std::cout;
-using std::cin;
-using std::endl;
-using std::vector;
-
-int main()
-{
-    //question 1
-    vector<int> ivec;
-    int i;
-    while (cin >> i)
-    {
-        ivec.push_back(i);
-    }
-
-    for (int i = 0; i < ivec.size() - 1; i++)
-    {
-        cout << ivec[i] + ivec[i + 1] << endl;
-    }
-
-    //question 2
-    int m = 0;
-    int n = ivec.size() - 1;
-    while (n > m)
-    {
-        cout << ivec[m] + ivec[n] << endl;
-        ++m;
-        --n;
-    }
-    return 0;
-    
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> using std::cout;
+> using std::cin;
+> using std::endl;
+> using std::vector;
+>
+> int main()
+> {
+>    //question 1
+>    vector<int> ivec;
+>    int i;
+>    while (cin >> i)
+>    {
+>        ivec.push_back(i);
+>    }
+>
+>    for (int i = 0; i < ivec.size() - 1; i++)
+>    {
+>        cout << ivec[i] + ivec[i + 1] << endl;
+>    }
+>
+>    //question 2
+>    int m = 0;
+>    int n = ivec.size() - 1;
+>    while (n > m)
+>    {
+>        cout << ivec[m] + ivec[n] << endl;
+>        ++m;
+>        --n;
+>    }
+>    return 0;
+>    }
+> ```
 
 ## 3.4 迭代器介绍
 ### 3.4.1 使用迭代器
 #### 练习3.21
 请使用迭代器重做 **练习3.16**
-```cpp
-#include <iostream>
-#include <string>
-#include <iterator>
-#include <vector>
-
-using std::cout;
-using std::string;
-using std::endl;
-using std::vector;
-
-void print(const vector<int>& vec)
-{
-    cout << "size: " << vec.size() << endl 
-        << " content :";
-    for (auto it = vec.begin(); it !=  vec.end(); ++it)
-    {
-        cout << *it << (it != vec.end() - 1 ? ", " : "");
-    }
-    cout << endl;
-    
-}
-
-void print(const vector<string>& vec)
-{
-    cout << "size: " << vec.size() << endl 
-        << " content :";
-    for (auto it = vec.begin(); it !=  vec.end(); ++it)
-    {
-        cout << *it << (it != vec.end() - 1 ? ", " : "");
-    }
-    cout << endl;
-}
-
-int main()
-{
-    vector<int> v1;     
-	vector<int> v2(10);    
-	vector<int> v3(10, 42); 
-	vector<int> v4{ 10 };    
-	vector<int> v5{ 10, 42 }; 
-	vector<string> v6{ 10 };  
-	vector<string> v7{ 10, "hi" }; 
-
-    print(v1);
-    print(v2);
-    print(v3);
-    print(v4);
-    print(v5);
-    print(v6);
-    print(v7);
-
-    return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> #include <iterator>
+> #include <vector>
+> using std::cout;
+> using std::string;
+> using std::endl;
+> using std::vector;
+>
+> void print(const vector<int>& vec)
+> {
+>    cout << "size: " << vec.size() << endl 
+>        << " content :";
+>    for (auto it = vec.begin(); it !=  vec.end(); ++it)
+>    {
+>        cout << *it << (it != vec.end() - 1 ? ", " : "");
+>    }
+>    cout << endl;
+>    
+> }
+>
+> void print(const vector<string>& vec)
+> {
+>    cout << "size: " << vec.size() << endl 
+>        << " content :";
+>    for (auto it = vec.begin(); it !=  vec.end(); ++it)
+>    {
+>        cout << *it << (it != vec.end() - 1 ? ", " : "");
+>    }
+>    cout << endl;
+> }
+>
+> int main()
+> {
+>    vector<int> v1;     
+>	vector<int> v2(10);    
+>	vector<int> v3(10, 42); 
+>	vector<int> v4{ 10 };    
+>	vector<int> v5{ 10, 42 }; 
+>	vector<string> v6{ 10 };  
+>	vector<string> v7{ 10, "hi" }; 
+>
+>    print(v1);
+>    print(v2);
+>    print(v3);
+>    print(v4);
+>    print(v5);
+>    print(v6);
+>    print(v7);
+>
+>    return 0;
+> }
+> ```
 
 #### 练习3.22
 修改之前那个输出text第一段的程序，首先把text的第一段全部改成大写形式，然后输出它。
-```cpp
-#include <iostream>
-#include <vector>
-#include <string>
-
-using namespace std;
-
-int main()
-{
-    vector<string> text;
-    text.push_back("aaaaaaaaaa aaaaaaaaa aaaaaa");
-	text.push_back("");
-	text.push_back("bbbbbbbbbbbbbb bbbbbbbbbbb bbbbbbbbbbbbb");
-
-    for (auto it = text.begin(); it != text.end() && !it->empty(); ++it)
-    {
-        for (auto &c : *it)
-        {
-            if (isalpha(c)) c = toupper(c);
-        }
-    }
-
-    for (auto it : text)
-    {
-        cout << it << endl;
-    }
-    
-    return 0;
-    
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> #include <string>
+> using namespace std;
+>
+> int main()
+> {
+>    vector<string> text;
+>    text.push_back("aaaaaaaaaa aaaaaaaaa aaaaaa"); 
+>    text.push_back("");
+>    text.push_back("bbbbbbbbbbbbbb bbbbbbbbbbb bbbbbbbbbbbbb");
+>
+>    for (auto it = text.begin(); it != text.end() && !it->empty(); ++it)
+>    {
+>        for (auto &c : *it)
+>        {
+>            if (isalpha(c)) c = toupper(c);
+>        }
+>    }
+>
+>    for (auto it : text)
+>    {
+>        cout << it << endl;
+>    }
+>    
+>    return 0;
+>    
+> }
+> ```
 
 #### 练习3.23
 编写一段程序，创建一个含有10个整数的`vector`对象，然后使用迭代器将所有的元素都变成原来的两倍，输出`vector`对象的内容，检验程序是否正确。
-```cpp
-#include <iostream>
-#include <vector>
-#include <iterator>
-
-using namespace std;
-
-int main()
-{
-    vector<int> ivec{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    
-    for (auto it = ivec.begin(); it != ivec.end(); ++it)
-    {
-        *it  = *it * 2;
-        cout << *it << endl;
-    }
-    return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> #include <iterator>
+> using namespace std;
+>
+> int main()
+> {
+>    vector<int> ivec{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+>    
+>    for (auto it = ivec.begin(); it != ivec.end(); ++it)
+>    {
+>        *it  = *it * 2;
+>        cout << *it << endl;
+>    }
+>    return 0;
+> }
+> ```
 
 
 ### 3.4.1 迭代器运算
 #### 练习3.24 
 请使用迭代器重做练习3.20
-```cpp
-#include <iostream>
-#include <string>
-#include <vector>
-
-using namespace std;
-
-int main()
-{
-    vector<int> ivec;
-    int i;
-    while (cin >> i)
-    {
-        ivec.push_back(i);
-    }
-    
-    for (auto it = ivec.begin(); it != ivec.end() - 1; it++)
-    {
-        cout << *it + *(it + 1) << endl;
-    }
-
-    cout << "---------------------------------" << endl;
-
-	auto it1 = ivec.begin();
-	auto it2 = ivec.end() - 1;
-	while (it1 < it2)
-	{
-		cout << *it1 + *it2 << endl;
-		++it1;
-		--it2;
-	}
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> #include <vector>
+> using namespace std;
+>
+> int main()
+> {
+>    vector<int> ivec;
+>    int i;
+>    while (cin >> i)
+>    {
+>        ivec.push_back(i);
+>    }
+>    
+>    for (auto it = ivec.begin(); it != ivec.end() - 1; it++)
+>    {
+>        cout << *it + *(it + 1) << endl;
+>    }
+>
+>    cout << "---------------------------------" << endl;
+>
+>	auto it1 = ivec.begin();
+>	auto it2 = ivec.end() - 1;
+>	while (it1 < it2)
+>	{
+>		cout << *it1 + *it2 << endl;
+>		++it1;
+>		--it2;
+>	}
+>	return 0;
+> }
+> ```
 
 #### 练习3.25 
 3.3.3节划分分数段的程序是使用下标运算符实现的，请利用迭代器改写该程序实现完全相同的功能。
-```cpp
-#include <vector>
-#include <iostream>
-
-using namespace std;
-
-int main()
-{
-	vector<unsigned> scores(11, 0);
-	unsigned grade;
-	while (cin >> grade)
-	{
-		if (grade <= 100)
-			++*(scores.begin() + grade / 10);
-	}
-
-	for (auto s : scores)
-		cout << s << " ";
-	cout << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <vector>
+> #include <iostream>
+> using namespace std;
+>
+> int main()
+> {
+>	vector<unsigned> scores(11, 0);
+>	unsigned grade;
+>	while (cin >> grade)
+>	{
+>		if (grade <= 100)
+>			++*(scores.begin() + grade / 10);
+>	}
+>
+>	for (auto s : scores)
+>		cout << s << " ";
+>	cout << endl;
+>
+>	return 0;
+> }
+> ```
 
 #### 练习3.26
-在100页的二分搜索程序中，为什么用的是 mid = beg + (end - beg) / 2, 而非 mid = (beg + end) / 2 ; ?
+在100页的二分搜索程序中，为什么用的是`mid = beg + (end - beg) / 2`, 而非`mid = (beg + end) / 2`; ?
 > 因为迭代器支持的运算只有 `-` ，而没有 `+` 。`end - beg` 意思是相距若干个元素，将之除以`2`然后与`beg`相加，表示将`beg`移动到一半的位置。
 
 
@@ -1136,21 +1126,21 @@ for (size_t ix = 1; ix <= array_size; ++ix)
 
 #### 练习3.31
 编写一段程序，定义一个含有`10`个`int`的数组，令每个元素的值就是其下标值。
-```cpp
-#include <iostream>
-using std::cout;
-using std::endl;
-
-int main()
-{
-    int a[10];
-    for (auto i = 0; i < 10; i++){
-        a[i] = i;
-        cout << a[i] << endl;
-    }
-    return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cout;
+> using std::endl;
+>
+> int main()
+> {
+>    int a[10];
+>    for (auto i = 0; i < 10; i++){
+>        a[i] = i;
+>        cout << a[i] << endl;
+>    }
+>    return 0;
+> }
+> ```
 
 #### 练习3.32
 将上一题刚刚创建的数组拷贝给另一数组。利用`vector`重写程序，实现类似的功能。
