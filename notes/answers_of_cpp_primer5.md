@@ -64,16 +64,16 @@ d) `3.14L`
 
 #### 练习2.8 
 请利用转义序列编写一段程序，要求先输出`2M`，然后转到新一行。修改程序使其先输出`2`，然后输出制表符，再输出`M`，最后转到新一行。
-```c++
-#include <iostream>
-
-int main()
-{
-    std::cout << 2 << "\115\012";
-    std::cout << 2 << "\t\115\012";
-    return 0;
-}
-```
+> ```c++
+> #include <iostream>
+> 
+> int main()
+> {
+>     std::cout << 2 << "\115\012";
+>     std::cout << 2 << "\t\115\012";
+>     return 0;
+> }
+> ```
 
 
 ## 2.2 变量
@@ -180,14 +180,14 @@ std::cout << i << " " << ri << std::endl;
 ### 2.3.2 指针
 #### 练习2.18
 编写代码分别更改指针的值以及指针所指的对象的值。
-```c++
-int a = 1, b = 2;
-int *p1 = &a, *p2 = p1;
-//change value of pointer
-p1 = &b;
-//change the value of the object which pointer pointing at
-p2 = b;
-```
+> ```c++
+> int a = 1, b = 2;
+> int *p1 = &a, *p2 = p1;
+> //change value of pointer
+> p1 = &b;
+> //change the value of the object which pointer pointing at
+> p2 = b;
+> ```
 
 #### 练习2.19
 请说明指针和引用的主要区别。
@@ -251,7 +251,7 @@ long *lp = &i;
 > (b)`i`是`int`类型的变量，`ip`是一个空指针
 > (c)`ip`是指向`int`的指针，`ip2`是`int`类型的变量
 
-## 2.4 `const`限定符
+## 2.4 const限定符
 #### 练习2.26
 下面哪些句子是合法的？如果有不合法的句子，请说明为什么？
 ```c++
@@ -330,7 +330,7 @@ p1 = p3;//不合法，p3是一个底层const，p1是只是一个普通的指针
 p2 = p3; //合法，p2和p3都是底层const，拷贝时忽略掉底层const
 ```
 
-### 2.4.4 `constexpr`和常量表达式
+### 2.4.4 constexpr和常量表达式
 #### 练习2.32 
 下面代码是否合法？如果非法，请设法将其修改正确。
 ```c++
@@ -434,7 +434,7 @@ decltype(a = b) d = a;
 #### 练习2.38
 说明由`decltype`指定类型和由`auto`指定类型有何区别。请举一个例子，`decltype`指定的类型与`auto`指定的类型一样；再举一个例子，`decltype`指定的类型与`auto`指定的类型不一样。
 > `decltype`处理顶层`const`和引用的方式与`auto`不同，`decltype`会将顶层`const`和引用保留起来。
-> ```cc
+> ```cpp
 > int i = 0, &r = i;
 > //相同
 > auto a = i;
@@ -489,111 +489,110 @@ decltype(a = b) d = a;
 
 #### 练习3.4 
 编写一段程序读入两个字符串，比较其是否相等并输出结果。如果不相等，输出较大的那个字符串。改写上述程序，比较输入的两个字符串是否等长，如果不等长，输出长度较大的那个字符串
-```c++
-#include <iostream>
-#include <string>
-using std::string;
-using std::cout;
-using std::cin;
-using std::endl;
+> ```c++
+> #include <iostream>
+> #include <string>
+> using std::string;
+> using std::cout;
+> using std::cin;
+> using std::endl;
+>
+> int main()
+> {
+>     string s1,s2;
+>     getline(cin, s1);
+>     getline(cin, s2);
+> 
+>     if (s1 == s2)
+>     {
+>         cout << "equal!" << endl;
+>     }
+>     else 
+>     {
+>         cout << ((s1 > s2) ? s1 : s2) << endl;
+>     }
+> }
+> ```
 
-int main()
-{
-    string s1,s2;
-    getline(cin, s1);
-    getline(cin, s2);
-
-    if (s1 == s2)
-    {
-        cout << "equal!" << endl;
-    }
-    else 
-    {
-        cout << ((s1 > s2) ? s1 : s2) << endl;
-    }
-}
-```
-
-```c++
-#include <iostream>
-#include <string>
-using std::string;
-using std::cout;
-using std::cin;
-using std::endl;
-
-int main()
-{
-    string s1,s2;
-    getline(cin, s1);
-    getline(cin, s2);
-
-    if (s1.size() == s2.size())
-    {
-        cout << "equal!" << endl;
-    }
-    else 
-    {
-        cout << ((s1.size() > s2.size()) ? s1 : s2) << endl;
-    }
-}
-```
+> ```c++
+> #include <iostream>
+> #include <string>
+> using std::string;
+> using std::cout;
+> using std::cin;
+> using std::endl;
+> 
+> int main()
+> {
+>     string s1,s2;
+>     getline(cin, s1);
+>     getline(cin, s2);
+>
+>     if (s1.size() == s2.size())
+>     {
+>         cout << "equal!" << endl;
+>     }
+>     else 
+>     {
+>         cout << ((s1.size() > s2.size()) ? s1 : s2) << endl;
+>     }
+> }
+> ```
 
 
 #### 练习3.5
 编写一段程序从标准输入中读入多个字符串并将它们连接在一起，输出连接成的大字符串，然后修改上述程序，用空格把输入的多个字符串分隔开来
-```c++
-#include <iostream>
-#include <string>
-using std::string;
-using std::cout;
-using std::cin;
-using std::endl;
+> ```c++
+> #include <iostream>
+> #include <string>
+> using std::string;
+> using std::cout;
+> using std::cin;
+> using std::endl;
+> 
+> int main()
+> {
+> 	string result, s;
+> 	while (getline(cin, s))
+> 	{
+> 		result += s;
+> 	}
+> 	cout << result << endl;
+>
+> 	return 0;
+> }
+> ```
 
-int main()
-{
-	string result, s;
-	while (getline(cin, s))
-	{
-		result += s;
-	}
-	cout << result << endl;
-
-	return 0;
-}
-```
-
-```c++
-#include <iostream>
-#include <string>
-using std::string;
-using std::cout;
-using std::cin;
-using std::endl;
-
-int main()
-{
-	string result, s;
-	while (getline(cin, s))
-	{
-		result += s + " ";
-	}
-	cout << result << endl;
-
-	return 0;
-}
-```
+> ```c++
+> #include <iostream>
+> #include <string>
+> using std::string;
+> using std::cout;
+> using std::cin;
+> using std::endl;
+>
+> int main()
+> {
+> 	string result, s;
+> 	while (getline(cin, s))
+> 	{
+> 		result += s + " ";
+> 	}
+> 	cout << result << endl;
+>
+> 	return 0;
+> }
+> ```
 
 ### 3.2.3 处理string对象中的字符
 #### 练习3.6
 编写一段程序，使用范围`for`语句将字符串内所有字符用`X`代替。
-```cpp
-for (auto &x : s)
-	{
-		x = 'X';
-	}
-
-```
+> ```cpp
+> for (auto &x : s)
+> 	{
+> 		x = 'X';
+> 	}
+> ```
 
 #### 练习3.7
 就上一题完成的程序而言，如果将循环控制的变量设置为char将发生什么？先估计一下结果，然后实际编程进行验证。
