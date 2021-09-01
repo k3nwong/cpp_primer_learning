@@ -1144,31 +1144,31 @@ for (size_t ix = 1; ix <= array_size; ++ix)
 
 #### 练习3.32
 将上一题刚刚创建的数组拷贝给另一数组。利用`vector`重写程序，实现类似的功能。
-```cpp
-#include <iostream>
-#include <vector>
-using std::cout;
-using std::endl;
-using std::vector;
-
-int main()
-{
-    int a[10] = {0,1,2,3,4,5,6,7,8,9};
-    int b[10];
-    for (auto i = 0; i < 10; i++){
-        b[i] = a[i];
-    }
-    return 0;
-
-    //--------------------------------
-    vector<int> c(10);
-    for (auto j = 0; j < 10; j++)
-    {
-        c[j] = a[j];
-    }
-    vector<int> v2(c);
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> using std::cout;
+> using std::endl;
+> using std::vector;
+>
+> int main()
+> {
+>    int a[10] = {0,1,2,3,4,5,6,7,8,9};
+>    int b[10];
+>    for (auto i = 0; i < 10; i++){
+>        b[i] = a[i];
+>    }
+>    return 0;
+>
+>    //--------------------------------
+>    vector<int> c(10);
+>    for (auto j = 0; j < 10; j++)
+>    {
+>        c[j] = a[j];
+>    }
+>    vector<int> v2(c);
+> }
+> ```
 
 #### 练习3.33
 对于104页的程序来说，如果不初始化`scores`将会发生什么？
@@ -1176,78 +1176,76 @@ int main()
 
 ### 3.5.3 指针和数组
 #### 练习3.34
-假定p1 和 p2 都指向同一个数组中的元素，则下面程序的功能是什么？什么情况下该程序是非法的？
+假定`p1`和`p2`都指向同一个数组中的元素，则下面程序的功能是什么？什么情况下该程序是非法的？
 ```cpp
 p1 += p2 - p1;
 ```
-> 将 p1 移动到 p2 的位置。任何情况下都合法。
+> 将`p1`移动到`p2`的位置。任何情况下都合法。
 
 #### 练习3.35
 编写一段程序，利用指针将数组中的元素置为0。
-```cpp
-#include <iostream>
-using std::cout; 
-using std::endl;
-
-int main()
-{
-	const int size = 10;
-	int arr[size];
-	for (auto ptr = arr; ptr != arr + size; ++ptr) 
-		*ptr = 0;
-
-	for (auto i : arr) cout << i << ", ";
-	cout << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cout; 
+> using std::endl;
+> 
+> int main()
+> {
+>	const int size = 10;
+>	int arr[size];
+>	for (auto ptr = arr; ptr != arr + size; ++ptr) 
+>		*ptr = 0;
+>
+>	for (auto i : arr) cout << i << ", ";
+>	cout << endl;
+>
+>	return 0;
+> }
+> ```
 
 #### 练习3.36
-编写一段程序，比较两个数组是否相等。再写一段程序，比较两个vector对象是否相等。
-```cpp
-#include <iostream>
-#include <vector>
-#include <iterator>
-
-using namespace std;
-
-bool compare(int* const beg1, int* const end1, int* const beg2, int* const end2)
-{
-	if ((end1 - beg1) != (end2 - beg2)) 
-		return false;
-	else
-	{
-		for (int* i = beg1, *j = beg2; (i != end1) && (j != end2); ++i, ++j)
-			if (*i != *j)
-				return false;
-	}
-
-	return true;
-}
-
-int main()
-{
-	int arr1[3] = { 0, 1, 2 };
-	int arr2[3] = { 0, 2, 4 };
-
-	if (compare(begin(arr1), end(arr1), begin(arr2), end(arr2)))
-		cout << "The two arrays are equal." << endl;
-	else
-		cout << "The two arrays are not equal." << endl;
-
-
-	vector<int> vec1 = { 0, 1, 2 };
-	vector<int> vec2 = { 0, 1, 2 };
-
-	if (vec1 == vec2)
-		cout << "The two vectors are equal." << endl;
-	else
-		cout << "The two vectors are not equal." << endl;
-
-	return 0;
-}
-```
+编写一段程序，比较两个数组是否相等。再写一段程序，比较两个`vector`对象是否相等。
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> #include <iterator>
+> using namespace std;
+>
+> bool compare(int* const beg1, int* const end1, int* const beg2, int* const end2)
+> {
+>	if ((end1 - beg1) != (end2 - beg2)) 
+>		return false;
+>	else
+>	{
+>		for (int* i = beg1, *j = beg2; (i != end1) && (j != end2); ++i, ++j)
+>			if (*i != *j)
+>				return false;
+>	}
+>
+>	return true;
+> }
+>
+> int main()
+> {
+>	int arr1[3] = { 0, 1, 2 };
+>	int arr2[3] = { 0, 2, 4 };
+>
+>	if (compare(begin(arr1), end(arr1), begin(arr2), end(arr2)))
+>		cout << "The two arrays are equal." << endl;
+>	else
+>		cout << "The two arrays are not equal." << endl;
+>
+>	vector<int> vec1 = { 0, 1, 2 };
+>	vector<int> vec2 = { 0, 1, 2 };
+>
+>	if (vec1 == vec2)
+>		cout << "The two vectors are equal." << endl;
+>	else
+>		cout << "The two vectors are not equal." << endl;
+>
+>	return 0;
+> }
+> ```
 
 ### 3.5.4 C风格字符串
 #### 练习3.37
@@ -1268,213 +1266,210 @@ while (*cp) {
 
 #### 练习3.39
 编写一段程序，比较两个string对象。再编写一段程序，比较两个C风格字符串的内容
-```cpp
-#include <iostream>
-#include <string>
-#include <cstring>
-using std::cout; 
-using std::endl; 
-using std::string;
-
-int main()
-{
-	string s1("aaaaaaaaaa"), s2("bbbbbbbbbb");
-	if (s1 == s2)
-		cout << "same string." << endl;
-	else if (s1 > s2)
-		cout << "aaaaaaaaaa > bbbbbbbbbb" << endl;
-	else
-		cout << "aaaaaaaaaa < bbbbbbbbbb" << endl;
-
-	const char* cs1 = "aaaaaaaaaa";
-	const char* cs2 = "bbbbbbbbbb";
-	auto result = strcmp(cs1, cs2);
-	if (result == 0)
-		cout << "same string." << endl;
-	else if (result < 0)
-		cout << "aaaaaaaaaa < bbbbbbbbbb" << endl;
-	else
-		cout << "aaaaaaaaaa > bbbbbbbbbb" << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> #include <cstring>
+> using std::cout; 
+> using std::endl; 
+> using std::string;
+>
+> int main()
+> {
+>	string s1("aaaaaaaaaa"), s2("bbbbbbbbbb");
+>	if (s1 == s2)
+>		cout << "same string." << endl;
+>	else if (s1 > s2)
+>		cout << "aaaaaaaaaa > bbbbbbbbbb" << endl;
+>	else
+>		cout << "aaaaaaaaaa < bbbbbbbbbb" << endl;
+>
+>	const char* cs1 = "aaaaaaaaaa";
+>	const char* cs2 = "bbbbbbbbbb";
+>	auto result = strcmp(cs1, cs2);
+>	if (result == 0)
+>		cout << "same string." << endl;
+>	else if (result < 0)
+>		cout << "aaaaaaaaaa < bbbbbbbbbb" << endl;
+>	else
+>		cout << "aaaaaaaaaa > bbbbbbbbbb" << endl;
+>
+>	return 0;
+> }
+> ```
 
 #### 练习3.40
 编写一段程序，定义两个字符数组并用字符串字面值初始化它们；接着再定义一个字符数组存放前面两个数组连接后的结果。使用strcpy和strcat把前两个数组的内容拷贝到第三个数组当中。
-```cpp
-#include <iostream>
-#include <cstring>
-
-const char cstr1[] = "Hello ";
-const char cstr2[] = "world!";
-
-int main()
-{
-	char cstr3[100];
-
-	strcpy(cstr3, cstr1);
-	strcat(cstr3, cstr2);
-
-	std::cout << cstr3 << std::endl;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <cstring>
+>
+> const char cstr1[] = "Hello ";
+> const char cstr2[] = "world!";
+>
+> int main()
+> {
+>	char cstr3[100];
+>
+>	strcpy(cstr3, cstr1);
+>	strcat(cstr3, cstr2);
+>
+>	std::cout << cstr3 << std::endl;
+> }
+> ```
 
 ### 3.5.5 与旧代码的接口
 #### 练习3.41
 编写一段程序，用整型数组初始化一个`vector`对象
-```cpp
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
-int main()
-{
-	int arr[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	vector<int> v(begin(arr), end(arr));
-
-	for (auto i : v) cout << i << " ";
-	cout << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> using namespace std;
+> 
+> int main()
+> {
+>	int arr[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+>	vector<int> v(begin(arr), end(arr));
+>
+>	for (auto i : v) cout << i << " ";
+>	cout << endl;
+>
+>	return 0;
+> }
+> ```
 
 #### 练习3.42
 编写一段程序，将含有整数元素的`vector`对象拷贝给一个整型数组
-```cpp
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
-int main()
-{
-	vector<int> v{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	int arr[10];
-	for (int i = 0; i < v.size(); ++i) 
-		arr[i] = v[i];
-
-	for (auto i : arr) cout << i << " ";
-	cout << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+>
+> using namespace std;
+>
+> int main()
+> {
+>	vector<int> v{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+>	int arr[10];
+>	for (int i = 0; i < v.size(); ++i) 
+>		arr[i] = v[i];
+>
+>	for (auto i : arr) cout << i << " ";
+>	cout << endl;
+>
+>	return 0;
+> }
+> ```
 
 
 ## 3.6 多维数组
 #### 练习3.43
 编写3个不同版本的程序，令其均能输出`ia`的元素。版本1使用范围`for`语句管理迭代过程；版本2和版本3都使用普通`for`语句，其中版本2要求使用下标运算符，版本3要求使用指针。此外，在所有3个版本的程序中都要直接写出数据类型，而不能使用类型别名、`auto`关键字和`decltype`关键字。
-```cpp
-#include <iostream>
-#include <iterator>
-using namespace std;
-
-int main()
-{
-    int ia[3][4] = 
-    {
-		{ 0, 1, 2, 3 },
-		{ 4, 5, 6, 7 },
-		{ 8, 9, 10, 11 }
-	};
-
-    //vesion 1
-    for (const int(&row)[4] : ia)
-        for (int col : row)
-            cout << col << " ";
-    cout << endl;
-
-    //version 2
-    for (size_t i = 0; i < 3; i++)
-        for (size_t j = 0; j < 4; j++)
-            cout << ia[i][j] << " ";
-    cout << endl;
-
-    //version 3 
-    for (int(*row)[4] = begin(ia); row != end(ia); row++)
-        for (int *col = begin(*row); col != end(*row); ++ col)
-            cout << *col << " ";
-    cout << endl;
-
-    return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <iterator>
+> using namespace std;
+>
+> int main()
+> {
+>    int ia[3][4] = 
+>    {
+>		{ 0, 1, 2, 3 },
+>		{ 4, 5, 6, 7 },
+>		{ 8, 9, 10, 11 }
+>	};
+>
+>    //vesion 1
+>    for (const int(&row)[4] : ia)
+>        for (int col : row)
+>            cout << col << " ";
+>    cout << endl;
+>
+>    //version 2
+>    for (size_t i = 0; i < 3; i++)
+>        for (size_t j = 0; j < 4; j++)
+>            cout << ia[i][j] << " ";
+>    cout << endl;
+>
+>    //version 3 
+>    for (int(*row)[4] = begin(ia); row != end(ia); row++)
+>        for (int *col = begin(*row); col != end(*row); ++ col)
+>            cout << *col << " ";
+>    cout << endl;
+>
+>    return 0;
+> }
+> ```
 
 #### 练习3.44
 改写上一个练习中的程序，使用类型别名来代替循环控制变量的类型。
-```cpp
-#include <iostream>
-
-using std::cout; 
-using std::endl;
-
-int main()
-{
-	int ia[3][4] = 
-    {
-		{ 0, 1, 2, 3 },
-		{ 4, 5, 6, 7 },
-		{ 8, 9, 10, 11 }
-	};
-	using int_array = int[4];
-
-	for (int_array& p : ia)
-		for (int q : p)
-			cout << q << " ";
-	cout << endl;
-
-	for (size_t i = 0; i != 3; ++i)
-		for (size_t j = 0; j != 4; ++j)
-			cout << ia[i][j] << " ";
-	cout << endl;
-
-	for (int_array* p = ia; p != ia + 3; ++p)
-		for (int *q = *p; q != *p + 4; ++q)
-			cout << *q << " ";
-	cout << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cout; 
+> using std::endl;
+>
+> int main()
+> {
+>	int ia[3][4] = 
+>    {
+>		{ 0, 1, 2, 3 },
+>		{ 4, 5, 6, 7 },
+>		{ 8, 9, 10, 11 }
+>	};
+>	using int_array = int[4];
+>
+>	for (int_array& p : ia)
+>		for (int q : p)
+>			cout << q << " ";
+>	cout << endl;
+>
+>	for (size_t i = 0; i != 3; ++i)
+>		for (size_t j = 0; j != 4; ++j)
+>			cout << ia[i][j] << " ";
+>	cout << endl;
+>
+>	for (int_array* p = ia; p != ia + 3; ++p)
+>		for (int *q = *p; q != *p + 4; ++q)
+>			cout << *q << " ";
+>	cout << endl;
+>
+>	return 0;
+> }
+> ```
 
 #### 练习3.45
 再一次改写程序，这次使用`auto`关键字。
-```cpp
-#include <iostream>
-
-using std::cout;
-using std::endl;
-
-int main()
-{
-	int ia[3][4] = 
-    {
-		{ 0, 1, 2, 3 },
-		{ 4, 5, 6, 7 },
-		{ 8, 9, 10, 11 }
-	};
-
-	for (auto& p : ia)
-		for (auto q : p)
-			cout << q << " ";
-	cout << endl;
-
-	for (auto i = 0; i != 3; ++i)
-		for (auto j = 0; j != 4; ++j)
-			cout << ia[i][j] << " ";
-	cout << endl;
-
-	for (auto p = ia; p != ia + 3; ++p)
-		for (auto q = *p; q != *p + 4; ++q)
-			cout << *q << " ";
-	cout << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cout;
+> using std::endl;
+>
+> int main()
+> {
+>	int ia[3][4] = 
+>    {
+>		{ 0, 1, 2, 3 },
+>		{ 4, 5, 6, 7 },
+>		{ 8, 9, 10, 11 }
+>	};
+>
+>	for (auto& p : ia)
+>		for (auto q : p)
+>			cout << q << " ";
+>	cout << endl;
+>
+>	for (auto i = 0; i != 3; ++i)
+>		for (auto j = 0; j != 4; ++j)
+>			cout << ia[i][j] << " ";
+>	cout << endl;
+>
+>	for (auto p = ia; p != ia + 3; ++p)
+>		for (auto q = *p; q != *p + 4; ++q)
+>			cout << *q << " ";
+>	cout << endl;
+>
+>	return 0;
+> }
+> ```
 
 
 # 第四章 表达式
@@ -1523,12 +1518,12 @@ C++语言没有明确规定大多数二元运算符的求值顺序，给编译�
 
 #### 练习4.6
 写出一条表达式用于确定一个整数是奇数还是偶数。
-```cpp
-if (i % 2 == 0) 
-{
-
-}
-```
+> ```cpp
+> if (i % 2 == 0) 
+> {
+>
+> }
+> ```
 
 #### 练习4.7
 溢出是何含义？写出三条将导致溢出的表达式。
@@ -1555,10 +1550,10 @@ if (cp && *cp)
 
 #### 练习4.10
 为`while`循环写一个条件，使其从标准输入中读取整数，遇到`42`时停止。
-```cpp
-int i;
-while(cin >> i && i != 42)
-```
+> ```cpp
+> int i;
+> while(cin >> i && i != 42)
+> ```
 
 #### 练习4.11
 书写一条表达式用于测试4个值`a`、`b`、`c`、`d`的关系，确保`a`大于`b`、`b`大于`c`、`c`大于`d`。
@@ -1650,23 +1645,23 @@ if (i == 1024)
 ## 4.7 条件运算符
 #### 练习4.21
 编写一段程序，使用条件运算符从`vector<int>`中找到哪些元素的值是奇数，然后将这些奇数值翻倍。
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main()
-{
-    vector<int> ivec{1,4,5,6,235,422,45};
-
-    for (auto i : ivec)
-        cout << ((i % 2 == 1) ? i * 2 : i) << " ";
-    cout << endl;
-
-    return 0;
-    
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> using namespace std;
+>
+> int main()
+> {
+>    vector<int> ivec{1,4,5,6,235,422,45};
+>
+>    for (auto i : ivec)
+>        cout << ((i % 2 == 1) ? i * 2 : i) << " ";
+>    cout << endl;
+>
+>    return 0;
+>    
+> }
+> ```
 
 #### 练习4.22
 本节的示例程序将成绩划分为`high pass`、`pass`和`fail`三种，扩展该程序使其进一步将`60`分到`75`分之间的成绩设定为`low pass`。要求程序包含两个版本：一个版本只使用条件运算符；另一个版本使用1个或多个`if`语句。哪个版本的程序更容易理解呢？为什么？
@@ -1679,27 +1674,26 @@ string s = "word";
 string pl = s + s[s.size() - 1] == 's' ? "" : "s" ;
 ```
 > 加法运算符的优先级高于条件运算符。因此要改为：
-```cpp
-string pl = s + (s[s.size() - 1] == 's' ? "" : "s") ;
-```
+> ```cpp
+> string pl = s + (s[s.size() - 1] == 's' ? "" : "s") ;
+> ```
 
 #### 练习4.24
 本节的示例程序将成绩划分为`high pass`、`pass`、和`fail`三种，它的依据是条件运算符满足右结合律。假如条件运算符满足的是左结合律，求值的过程将是怎样的？
 
-如果条件运算符满足的是左结合律。那么
-```cpp
-finalgrade = (grade > 90) ? "high pass" : (grade < 60) ? "fail" : "pass";
-```
-等同于
-```cpp
-finalgrade = ((grade > 90) ? "high pass" : (grade < 60)) ? "fail" : "pass";
-```
-假如此时`grade > 90`，第一个条件表达式的结果是`"high pass"`，而字符串字面值的类型是`const char *`，非空所以为真。因此第二个条件表达式的结果是`"fail"`。这样就出现了自相矛盾的逻辑。
+> 如果条件运算符满足的是左结合律。那么
+> ```cpp
+> finalgrade = (grade > 90) ? "high pass" : (grade < 60) ? "fail" : "pass";
+> ```
+> 等同于
+> ```cpp
+> finalgrade = ((grade > 90) ? "high pass" : (grade < 60)) ? "fail" : "pass";
+> ```
+> 假如此时`grade > 90`，第一个条件表达式的结果是`"high pass"`，而字符串字面值的类型是`const char *`，非空所以为真。因此第二个条件表达式的结果是`"fail"`。这样就出现了自相矛盾的逻辑。
 
 ## 4.8 位运算符
 #### 练习4.25
 如果一台机器上`int`占 32 位、`char`占8位，用的是`Latin-1`字符集，其中字符`'q'`的二进制形式是`01110001`，那么表达式`'q' << 6`的值是什么？
-
 > 首先将`char`类型提升为`int`类型，等同于`00000000 00000000 00000000 01110001 << 6`，结果是`00000000 00000000 00011100 01000000`，转换是十进制是`7232`。
 
 #### 练习4.26
@@ -1724,31 +1718,31 @@ unsigned long ul1 = 3, ul2 = 7;
 ## 4.9 sizeof运算符
 #### 练习4.28
 编写一段程序，输出每一种内置类型所占空间的大小。
-```cpp
-#include <iostream> 
-using namespace std;
-
-int main()
-{
-	cout << "bool:\t\t" << sizeof(bool) << " bytes" << endl << endl;
-
-	cout << "char:\t\t" << sizeof(char) << " bytes" << endl;
-	cout << "wchar_t:\t" << sizeof(wchar_t) << " bytes" << endl;
-	cout << "char16_t:\t" << sizeof(char16_t) << " bytes" << endl;
-	cout << "char32_t:\t" << sizeof(char32_t) << " bytes" << endl << endl;
-
-	cout << "short:\t\t" << sizeof(short) << " bytes" << endl;
-	cout << "int:\t\t" << sizeof(int) << " bytes" << endl;
-	cout << "long:\t\t" << sizeof(long) << " bytes" << endl;
-	cout << "long long:\t" << sizeof(long long) << " bytes" << endl << endl;
-
-	cout << "float:\t\t" << sizeof(float) << " bytes" << endl;
-	cout << "double:\t\t" << sizeof(double) << " bytes" << endl;
-	cout << "long double:\t" << sizeof(long double) << " bytes" << endl << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream> 
+> using namespace std;
+>
+> int main()
+> {
+>	cout << "bool:\t\t" << sizeof(bool) << " bytes" << endl << endl;
+>
+>	cout << "char:\t\t" << sizeof(char) << " bytes" << endl;
+>	cout << "wchar_t:\t" << sizeof(wchar_t) << " bytes" << endl;
+>	cout << "char16_t:\t" << sizeof(char16_t) << " bytes" << endl;
+>	cout << "char32_t:\t" << sizeof(char32_t) << " bytes" << endl << endl;
+>
+>	cout << "short:\t\t" << sizeof(short) << " bytes" << endl;
+>	cout << "int:\t\t" << sizeof(int) << " bytes" << endl;
+>	cout << "long:\t\t" << sizeof(long) << " bytes" << endl;
+>	cout << "long long:\t" << sizeof(long long) << " bytes" << endl << endl;
+>
+>	cout << "float:\t\t" << sizeof(float) << " bytes" << endl;
+>	cout << "double:\t\t" << sizeof(double) << " bytes" << endl;
+>	cout << "long double:\t" << sizeof(long double) << " bytes" << endl << endl;
+>
+>	return 0;
+> }
+> ```
 
 #### 练习4.29
 推断下面代码的输出结果并说明理由。实际运行这段程序，结果和你想象的一样吗？如不一样，为什么？
@@ -1767,10 +1761,10 @@ cout << sizeof(p)/sizeof(*p) << endl;
 (c) sizeof a < b     
 (d) sizeof f()  
 ```
-> (a) (sizeof x) + y
-> (b) sizeof(p->mem[i])
-> (c) sizeof(a) < b
-> (d) sizeof(f())
+> (a) `(sizeof x) + y`
+> (b) `sizeof(p->mem[i])`
+> (c) `sizeof(a) < b`
+> (d) `sizeof(f())`
 
 ## 4.10 逗号运算符
 #### 练习4.31
@@ -1839,9 +1833,9 @@ double dval;
 ### 4.11.3 显示转换
 #### 练习4.36
 假设`i`是`int`类型，`d`是`double`类型，书写表达式`i*=d`使其执行整数类型的乘法而非浮点类型的乘法。
-```cpp
-i *= static_cast<int>(d);
-```
+> ```cpp
+> i *= static_cast<int>(d);
+> ```
 
 #### 练习4.37
 用命名的强制类型转换改写下列旧式的转换语句。
@@ -1852,10 +1846,12 @@ int i; double d; const string *ps; char *pc; void *pv;
 (c) pv = &d;
 (d) pc = (char*)pv;
 ```
+> ```cpp
 > (a) pv = static_cast<void*>(const_cast<string*>(ps));  
 > (b) i = static_cast<int>(*pc);  
 > (c) pv = static_cast<void*>(&d);  
 > (d) pc = static_cast<char*>(pv);
+> ```
 
 #### 练习4.38
 说明下面这条表达式的含义。
@@ -1879,10 +1875,10 @@ double slope = static_cast<double>(j/i);
 
 ## 练习5.3
 使用逗号运算符重写1.4.1节的 while 循环，使它不再需要块，观察改写之后的代码可读性提高了还是降低了。
-```cpp
-while (val <= 10)
-    sum += val, ++val;
-```
+> ```cpp
+> while (val <= 10)
+>    sum += val, ++val;
+> ```
 > 代码的可读性反而降低了。
 
 ## 5.2 语句作用域
@@ -1900,61 +1896,61 @@ while (val <= 10)
 ### 5.3.1 if语句
 #### 练习5.5
 写一段自己的程序，使用`if else`语句实现把数字转换为字母成绩的要求。
-```cpp
-#include <iostream>
-#include <vector>
-#include <string>
-using std::vector; 
-using std::string; 
-using std::cout; 
-using std::endl; 
-
-int main()
-{
-	vector<string> scores = { "F", "D", "C", "B", "A", "A++" };
-	int g = 0;
-	while (cin >> g)
-	{
-		string letter;
-		if (g < 60)
-			letter = scores[0];
-		else
-		{
-			letter = scores[(g - 50) / 10];
-			if (g != 100)
-				letter += g % 10 > 7 ? "+" : g % 10 < 3 ? "-" : "";
-			cout << letter << endl;
-		}
-	}
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> #include <string>
+> using std::vector; 
+> using std::string; 
+> using std::cout; 
+> using std::endl; 
+>
+> int main()
+> {
+>	vector<string> scores = { "F", "D", "C", "B", "A", "A++" };
+>	int g = 0;
+>	while (cin >> g)
+>	{
+>		string letter;
+>		if (g < 60)
+>			letter = scores[0];
+>		else
+>		{
+>			letter = scores[(g - 50) / 10];
+>			if (g != 100)
+>				letter += g % 10 > 7 ? "+" : g % 10 < 3 ? "-" : "";
+>			cout << letter << endl;
+>		}
+>	}
+>	return 0;
+> }
+> ```
 
 #### 练习5.6
 改写上一题的程序，使用条件运算符代替`if else`语句。
-```cpp
-#include <iostream>
-#include <vector>
-#include <string>
-using std::vector; 
-using std::string; 
-using std::cout; 
-using std::endl; 
-using std::cin;
-
-int main()
-{
-	vector<string> scores = { "F", "D", "C", "B", "A", "A++" };
-	int grade = 0;
-	while (cin >> grade)
-	{
-		string lettergrade = grade < 60 ? scores[0] : scores[(grade - 50) / 10];
-		lettergrade += (grade == 100 || grade < 60) ? "" : (grade % 10 > 7) ? "+" : (grade % 10 < 3) ? "-" : "";
-		cout << lettergrade << endl;
-	}
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> #include <string>
+> using std::vector; 
+> using std::string; 
+> using std::cout; 
+> using std::endl; 
+> using std::cin;
+>
+> int main()
+> {
+>	vector<string> scores = { "F", "D", "C", "B", "A", "A++" };
+>	int grade = 0;
+>	while (cin >> grade)
+>	{
+>		string lettergrade = grade < 60 ? scores[0] : scores[(grade - 50) / 10];
+>		lettergrade += (grade == 100 || grade < 60) ? "" : (grade % 10 > 7) ? "+" : (grade % 10 < 3) ? "-" : "";
+>		cout << lettergrade << endl;
+>	}
+>	return 0;
+> }
+> ```
 
 #### 练习5.7
 改写下列代码段中的错误。
@@ -1986,203 +1982,203 @@ int main()
 ### 5.3.2 switch语句
 #### 练习5.9
 编写一段程序，使用一系列`if`语句统计从`cin`读入的文本中有多少元音字母。
-```cpp
-#include <iostream>
-using std::cout; 
-using std::endl; 
-using std::cin;
-
-int main()
-{
-	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0;
-	char ch;
-	while (cin >> ch)
-	{
-		if (ch == 'a') ++aCnt;
-		else if (ch == 'e') ++eCnt;
-		else if (ch == 'i') ++iCnt;
-		else if (ch == 'o') ++oCnt;
-		else if (ch == 'u') ++uCnt;
-	}
-	cout << "Number of vowel a: \t" << aCnt << '\n'
-		<< "Number of vowel e: \t" << eCnt << '\n'
-		<< "Number of vowel i: \t" << iCnt << '\n'
-		<< "Number of vowel o: \t" << oCnt << '\n'
-		<< "Number of vowel u: \t" << uCnt << endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cout; 
+> using std::endl; 
+> using std::cin;
+>
+> int main()
+> {
+>	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0;
+>	char ch;
+>	while (cin >> ch)
+>	{
+>		if (ch == 'a') ++aCnt;
+>		else if (ch == 'e') ++eCnt;
+>		else if (ch == 'i') ++iCnt;
+>		else if (ch == 'o') ++oCnt;
+>		else if (ch == 'u') ++uCnt;
+>	}
+>	cout << "Number of vowel a: \t" << aCnt << '\n'
+>		<< "Number of vowel e: \t" << eCnt << '\n'
+>		<< "Number of vowel i: \t" << iCnt << '\n'
+>		<< "Number of vowel o: \t" << oCnt << '\n'
+>		<< "Number of vowel u: \t" << uCnt << endl;
+>	return 0;
+> }
+> ```
 
 #### 练习5.10
 我们之前实现的统计元音字母的程序存在一个问题：如果元音字母以大写形式出现，不会被统计在内。编写一段程序，既统计元音字母的小写形式，也统计元音字母的大写形式，也就是说，新程序遇到`'a'`和`'A'`都应该递增`aCnt`的值，以此类推。
-```cpp
-#include <iostream>
-using std::cin; 
-using std::cout; 
-using std::endl;
-int main()
-{
-	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0;
-	char ch;
-	while (cin >> ch)
-		switch (ch)
-	{
-		case 'a':
-		case 'A':
-			++aCnt;
-			break;
-		case 'e':
-		case 'E':
-			++eCnt;
-			break;
-		case 'i':
-		case 'I':
-			++iCnt;
-			break;
-		case 'o':
-		case 'O':
-			++oCnt;
-			break;
-		case 'u':
-		case 'U':
-			++uCnt;
-			break;
-	}
-	cout << "Number of vowel a(A): \t" << aCnt << '\n'
-		<< "Number of vowel e(E): \t" << eCnt << '\n'
-		<< "Number of vowel i(I): \t" << iCnt << '\n'
-		<< "Number of vowel o(O): \t" << oCnt << '\n'
-		<< "Number of vowel u(U): \t" << uCnt << endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cin; 
+> using std::cout; 
+> using std::endl;
+> int main()
+> {
+>	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0;
+>	char ch;
+>	while (cin >> ch)
+>		switch (ch)
+>	{
+>		case 'a':
+>		case 'A':
+>			++aCnt;
+>			break;
+>		case 'e':
+>		case 'E':
+>			++eCnt;
+>			break;
+>		case 'i':
+>		case 'I':
+>			++iCnt;
+>			break;
+>		case 'o':
+>		case 'O':
+>			++oCnt;
+>			break;
+>		case 'u':
+>		case 'U':
+>			++uCnt;
+>			break;
+>	}
+>	cout << "Number of vowel a(A): \t" << aCnt << '\n'
+>		<< "Number of vowel e(E): \t" << eCnt << '\n'
+>		<< "Number of vowel i(I): \t" << iCnt << '\n'
+>		<< "Number of vowel o(O): \t" << oCnt << '\n'
+>		<< "Number of vowel u(U): \t" << uCnt << endl;
+>	return 0;
+> }
+> ```
 
 #### 练习5.11
 修改统计元音字母的程序，使其也能统计空格、制表符、和换行符的数量。
-```cpp
-#include <iostream>
-using std::cin; 
-using std::cout; 
-using std::endl;
-
-int main()
-{
-	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0, spaceCnt = 0, tabCnt = 0, newLineCnt = 0;
-	char ch;
-	while (cin >> std::noskipws >> ch)//不忽略空白字符，将其读取
-		switch (ch)
-	{
-		case 'a':
-		case 'A':
-			++aCnt;
-			break;
-		case 'e':
-		case 'E':
-			++eCnt;
-			break;
-		case 'i':
-		case 'I':
-			++iCnt;
-			break;
-		case 'o':
-		case 'O':
-			++oCnt;
-			break;
-		case 'u':
-		case 'U':
-			++uCnt;
-			break;
-		case ' ':
-			++spaceCnt;
-			break;
-		case '\t':
-			++tabCnt;
-			break;
-		case '\n':
-			++newLineCnt;
-			break;
-	}
-	cout << "Number of vowel a(A): \t" << aCnt << '\n'
-		<< "Number of vowel e(E): \t" << eCnt << '\n'
-		<< "Number of vowel i(I): \t" << iCnt << '\n'
-		<< "Number of vowel o(O): \t" << oCnt << '\n'
-		<< "Number of vowel u(U): \t" << uCnt << '\n'
-		<< "Number of space: \t" << spaceCnt << '\n'
-		<< "Number of tab char: \t" << tabCnt << '\n'
-		<< "Number of new line: \t" << newLineCnt << endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cin; 
+> using std::cout; 
+> using std::endl;
+>
+> int main()
+> {
+>	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0, spaceCnt = 0, tabCnt = 0, newLineCnt = 0;
+>	char ch;
+>	while (cin >> std::noskipws >> ch)//不忽略空白字符，将其读取
+>		switch (ch)
+>	{
+>		case 'a':
+>		case 'A':
+>			++aCnt;
+>			break;
+>		case 'e':
+>		case 'E':
+>			++eCnt;
+>			break;
+>		case 'i':
+>		case 'I':
+>			++iCnt;
+>			break;
+>		case 'o':
+>		case 'O':
+>			++oCnt;
+>			break;
+>		case 'u':
+>		case 'U':
+>			++uCnt;
+>			break;
+>		case ' ':
+>			++spaceCnt;
+>			break;
+>		case '\t':
+>			++tabCnt;
+>			break;
+>		case '\n':
+>			++newLineCnt;
+>			break;
+>	}
+>	cout << "Number of vowel a(A): \t" << aCnt << '\n'
+>		<< "Number of vowel e(E): \t" << eCnt << '\n'
+>		<< "Number of vowel i(I): \t" << iCnt << '\n'
+>		<< "Number of vowel o(O): \t" << oCnt << '\n'
+>		<< "Number of vowel u(U): \t" << uCnt << '\n'
+>		<< "Number of space: \t" << spaceCnt << '\n'
+>		<< "Number of tab char: \t" << tabCnt << '\n'
+>		<< "Number of new line: \t" << newLineCnt << endl;
+>	return 0;
+> }
+> ```
 
 #### 练习5.12
-修改统计元音字母的程序，使其能统计含以下两个字符的字符序列的数量： ff、fl和fi。
-```cpp
-#include <iostream>
-using std::cin; 
-using std::cout; 
-using std::endl;
-
-int main()
-{
-	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0, spaceCnt = 0, tabCnt = 0, newLineCnt = 0, ffCnt = 0, flCnt = 0, fiCnt = 0;
-	char ch, prech = '\0';
-	while (cin >> std::noskipws >> ch)
-	{
-		switch (ch)
-		{
-		case 'a':
-		case 'A':
-			++aCnt;
-			break;
-		case 'e':
-		case 'E':
-			++eCnt;
-			break;
-		case 'i':
-			if (prech == 'f') ++fiCnt;
-		case 'I':
-			++iCnt;
-			break;
-		case 'o':
-		case 'O':
-			++oCnt;
-			break;
-		case 'u':
-		case 'U':
-			++uCnt;
-			break;
-		case ' ':
-			++spaceCnt;
-			break;
-		case '\t':
-			++tabCnt;
-			break;
-		case '\n':
-			++newLineCnt;
-			break;
-		case 'f':
-			if (prech == 'f') ++ffCnt;
-			break;
-		case 'l':
-			if (prech == 'f') ++flCnt;
-			break;
-		}
-		prech = ch;
-	}
-	cout << "Number of vowel a(A): \t" << aCnt << '\n'
-		<< "Number of vowel e(E): \t" << eCnt << '\n'
-		<< "Number of vowel i(I): \t" << iCnt << '\n'
-		<< "Number of vowel o(O): \t" << oCnt << '\n'
-		<< "Number of vowel u(U): \t" << uCnt << '\n'
-		<< "Number of space: \t" << spaceCnt << '\n'
-		<< "Number of tab char: \t" << tabCnt << '\n'
-		<< "Number of new line: \t" << newLineCnt << '\n'
-		<< "Number of ff: \t" << ffCnt << '\n'
-		<< "Number of fl: \t" << flCnt << '\n'
-		<< "Number of fi: \t" << fiCnt << endl;
-	return 0;
-}
-```
+修改统计元音字母的程序，使其能统计含以下两个字符的字符序列的数量： `ff`、`fl`和`fi`。
+> ```cpp
+> #include <iostream>
+> using std::cin; 
+> using std::cout; 
+> using std::endl;
+>
+> int main()
+> {
+>	unsigned aCnt = 0, eCnt = 0, iCnt = 0, oCnt = 0, uCnt = 0, spaceCnt = 0, tabCnt = 0, newLineCnt = 0, ffCnt = 0, flCnt = 0, fiCnt = 0;
+>	char ch, prech = '\0';
+>	while (cin >> std::noskipws >> ch)
+>	{
+>		switch (ch)
+>		{
+>		case 'a':
+>		case 'A':
+>			++aCnt;
+>			break;
+>		case 'e':
+>		case 'E':
+>			++eCnt;
+>			break;
+>		case 'i':
+>			if (prech == 'f') ++fiCnt;
+>		case 'I':
+>			++iCnt;
+>			break;
+>		case 'o':
+>		case 'O':
+>			++oCnt;
+>			break;
+>		case 'u':
+>		case 'U':
+>			++uCnt;
+>			break;
+>		case ' ':
+>			++spaceCnt;
+>			break;
+>		case '\t':
+>			++tabCnt;
+>			break;
+>		case '\n':
+>			++newLineCnt;
+>			break;
+>		case 'f':
+>			if (prech == 'f') ++ffCnt;
+>			break;
+>		case 'l':
+>			if (prech == 'f') ++flCnt;
+>			break;
+>		}
+>		prech = ch;
+>	}
+>	cout << "Number of vowel a(A): \t" << aCnt << '\n'
+>		<< "Number of vowel e(E): \t" << eCnt << '\n'
+>		<< "Number of vowel i(I): \t" << iCnt << '\n'
+>		<< "Number of vowel o(O): \t" << oCnt << '\n'
+>		<< "Number of vowel u(U): \t" << uCnt << '\n'
+>		<< "Number of space: \t" << spaceCnt << '\n'
+>		<< "Number of tab char: \t" << tabCnt << '\n'
+>		<< "Number of new line: \t" << newLineCnt << '\n'
+>		<< "Number of ff: \t" << ffCnt << '\n'
+>		<< "Number of fl: \t" << flCnt << '\n'
+>		<< "Number of fi: \t" << fiCnt << endl;
+>	return 0;
+> }
+> ```
 
 #### 练习5.13
 下面显示的每个程序都含有一个常见的编码错误，指出错误在哪里，然后修改它们。
@@ -2230,95 +2226,95 @@ int main()
     }
 ```
 > (a) 少了`break`语句。应该为：
-```cpp
-	unsigned aCnt = 0, eCnt = 0, iouCnt = 0;
-    char ch = next_text();
-    switch (ch) {
-    	case 'a': aCnt++; break;
-    	case 'e': eCnt++; break;
-    	default: iouCnt++; break;
-    }
-```
+> ```cpp
+>	unsigned aCnt = 0, eCnt = 0, iouCnt = 0;
+>   char ch = next_text();
+>    switch (ch) {
+>    	case 'a': aCnt++; break;
+>    	case 'e': eCnt++; break;
+>    	default: iouCnt++; break;
+>    }
+> ```
 > (b) 在`default`分支当中，`ix`未定义。应该在外部定义ix。
-```cpp
-    unsigned index = some_value();
-    int ix;
-    switch (index) {
-        case 1:
-            ix = get_value();
-            ivec[ ix ] = index;
-            break;
-        default:
-            ix = static_cast<int>(ivec.size())-1;
-            ivec[ ix ] = index;
-    }
-```
+> ```cpp
+>    unsigned index = some_value();
+>    int ix;
+>    switch (index) {
+>        case 1:
+>            ix = get_value();
+>            ivec[ ix ] = index;
+>            break;
+>        default:
+>            ix = static_cast<int>(ivec.size())-1;
+>            ivec[ ix ] = index;
+>    }
+> ```
 > (c)`case`后面应该用冒号而不是逗号。
-```cpp
-    unsigned evenCnt = 0, oddCnt = 0;
-    int digit = get_num() % 10;
-    switch (digit) {
-        case 1: case 3: case 5: case 7: case 9:
-            oddcnt++;
-            break;
-        case 2: case 4: case 6: case 8: case 0:
-            evencnt++;
-            break;
-    }
-```
+> ```cpp
+>    unsigned evenCnt = 0, oddCnt = 0;
+>    int digit = get_num() % 10;
+>    switch (digit) {
+>        case 1: case 3: case 5: case 7: case 9:
+>            oddcnt++;
+>            break;
+>        case 2: case 4: case 6: case 8: case 0:
+>            evencnt++;
+>            break;
+>    }
+> ```
 > (d) `case`标签必须是整型常量表达式。
-```cpp
-    const unsigned ival=512, jval=1024, kval=4096;
-    unsigned bufsize;
-    unsigned swt = get_bufCnt();
-    switch(swt) {
-        case ival:
-            bufsize = ival * sizeof(int);
-            break;
-        case jval:
-            bufsize = jval * sizeof(int);
-            break;
-        case kval:
-            bufsize = kval * sizeof(int);
-            break;
-    }
-```
+> ```cpp
+>    const unsigned ival=512, jval=1024, kval=4096;
+>    unsigned bufsize;
+>    unsigned swt = get_bufCnt();
+>    switch(swt) {
+>        case ival:
+>            bufsize = ival * sizeof(int);
+>            break;
+>        case jval:
+>            bufsize = jval * sizeof(int);
+>            break;
+>        case kval:
+>            bufsize = kval * sizeof(int);
+>            break;
+>    }
+> ```
 
 ## 5.4 迭代语句
 ### 5.4.1 while语句
 #### 练习5.14
 编写一段程序，从标准输入中读取若干`string`对象并查找连续重复出现的单词，所谓连续重复出现的意思是：一个单词后面紧跟着这个单词本身。要求记录连续重复出现的最大次数以及对应的单词。如果这样的单词存在，输出重复出现的最大次数；如果不存在，输出一条信息说明任何单词都没有连续出现过。例如：如果输入是：`how now now now brown cow cow`
 那么输出应该表明单词`now`连续出现了`3`次。
-```cpp
-#include <iostream>
-#include <string>
-using std::cout;
-using std::cin; 
-using std::endl; 
-using std::string; 
-using std::pair;
-
-int main()
-{
-	pair<string, int> max_duplicated;
-	int count = 0;
-	for (string str, prestr; cin >> str; prestr = str)
-	{
-		if (str == prestr) 
-			++count;
-		else 
-			count = 0;
-		if (count > max_duplicated.second) 
-			max_duplicated = { prestr, count };
-	}
-
-	if (max_duplicated.first.empty()) 
-		cout << "There's no duplicated string." << endl;
-	else 
-		cout << "the word " << max_duplicated.first << " occurred " << max_duplicated.second + 1 << " times. " << endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> using std::cout;
+> using std::cin; 
+> using std::endl; 
+> using std::string; 
+> using std::pair;
+> 
+> int main()
+> {
+>	pair<string, int> max_duplicated;
+>	int count = 0;
+>	for (string str, prestr; cin >> str; prestr = str)
+>	{
+>		if (str == prestr) 
+>			++count;
+>		else 
+>			count = 0;
+>		if (count > max_duplicated.second) 
+>			max_duplicated = { prestr, count };
+>	}
+>
+>	if (max_duplicated.first.empty()) 
+>		cout << "There's no duplicated string." << endl;
+>	else 
+>		cout << "the word " << max_duplicated.first << " occurred " << max_duplicated.second + 1 << " times. " << endl;
+>	return 0;
+> }
+> ```
 
 ### 5.4.2 传统的for语句
 #### 练习5.15
@@ -2332,57 +2328,57 @@ int main()
 (c) for (int ix = 0; ix != sz; ++ix, ++sz) { /*...*/ }
 ```
 > 应该改为下面这样：
-```cpp
-(a) int ix;
-    for (ix = 0; ix != sz; ++ix)  { /* ... */ }
-    if (ix != sz)
-    // . . .
-(b) int ix;
-    for (; ix != sz; ++ix) { /* ... */ }
-(c) for (int ix = 0; ix != sz; ++ix) { /*...*/ }
-```
+> ```cpp
+> (a) int ix;
+>    for (ix = 0; ix != sz; ++ix)  { /* ... */ }
+>    if (ix != sz)
+>    // . . .
+> (b) int ix;
+>     for (; ix != sz; ++ix) { /* ... */ }
+> (c) for (int ix = 0; ix != sz; ++ix) { /*...*/ }
+> ```
 
 #### 练习5.16
 `while`循环特别适用于那种条件不变、反复执行操作的情况，例如，当未达到文件末尾时不断读取下一个值。`for`循环更像是在按步骤迭代，它的索引值在某个范围内一次变化。根据每种循环的习惯各自编写一段程序，然后分别用另一种循环改写。如果只能使用一种循环，你倾向于哪种？为什么？
-```cpp
-for (int i = 0; i != size; ++i)
-    // ...
-
-int i = 0;
-while (i != size)
-{
-    // ...
-    ++i;
-}
-```
-如果只能用一种循环，我会更倾向使用`for`，因为`for`循环的循环体在括号内更清晰直观。
+> ```cpp
+> for (int i = 0; i != size; ++i)
+>    // ...
+>
+> int i = 0;
+> while (i != size)
+> {
+>    // ...
+>    ++i;
+> }
+> ```
+> 如果只能用一种循环，我会更倾向使用`for`，因为`for`循环的循环体在括号内更清晰直观。
 
 #### 练习5.17
 假设有两个包含整数的`vector`对象，编写一段程序，检验其中一个`vector`对象是否是另一个的前缀。为了实现这一目标，对于两个不等长的`vector`对象，只需挑出长度较短的那个，把它的所有元素和另一个`vector`对象比较即可。例如，如果两个`vector`对象的元素分别是`0、1、1、2`和`0、1、1、2、3、5、8`，则程序的返回结果为真。
-```cpp
-#include <iostream>
-#include <vector>
-using std::cout; 
-using std::vector;
-
-bool is_prefix(const vector<int>& lhs, const vector<int>& rhs)
-{
-	if (lhs.size() > rhs.size())
-		return is_prefix(rhs, lhs);
-	for (unsigned i = 0; i != lhs.size(); ++i)
-		if (lhs[i] != rhs[i]) 
-			return false;
-	return true;
-}
-
-int main()
-{
-	vector<int> l{ 0, 1, 1, 2 };
-	vector<int> r{ 0, 1, 1, 2, 3, 5, 8 };
-	cout << (is_prefix(r, l) ? "yes\n" : "no\n");
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> using std::cout; 
+> using std::vector;
+>
+> bool is_prefix(const vector<int>& lhs, const vector<int>& rhs)
+> {
+>	if (lhs.size() > rhs.size())
+>		return is_prefix(rhs, lhs);
+>	for (unsigned i = 0; i != lhs.size(); ++i)
+>		if (lhs[i] != rhs[i]) 
+>			return false;
+>	return true;
+> }
+>
+> int main()
+> {
+>	vector<int> l{ 0, 1, 1, 2 };
+>	vector<int> r{ 0, 1, 1, 2, 3, 5, 8 };
+>	cout << (is_prefix(r, l) ? "yes\n" : "no\n");
+>	return 0;
+> }
+> ```
 
 ### 5.4.3 范围for语句
 
@@ -2408,93 +2404,95 @@ int main()
 
 #### 练习5.19
 编写一段程序，使用`do while`循环重复地执行下述任务：首先提示用户输入两个`string`对象，然后挑出较短的那个并输出它。
-```cpp
-#include <iostream>
-#include <string>
-using std::cout;
-using std::cin; 
-using std::endl; 
-using std::string;
-
-int main()
-{
-	string choice;
-	do
-	{
-		cout << "Input two strings: ";
-		string str1, str2;
-		cin >> str1 >> str2;
-		cout << (str1 <= str2 ? str1 : str2)
-			<< " is less than the other. " << "\n\n"
-			<< "More? Enter yes or no: ";
-		cin >> choice;
-	} while (tolower(choice[0]) == 'y');
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> using std::cout;
+> using std::cin; 
+> using std::endl; 
+> using std::string;
+>
+> int main()
+> {
+>	string choice;
+>	do
+>	{
+>		cout << "Input two strings: ";
+>		string str1, str2;
+>		cin >> str1 >> str2;
+>		cout << (str1 <= str2 ? str1 : str2)
+>			<< " is less than the other. " << "\n\n"
+>			<< "More? Enter yes or no: ";
+>		cin >> choice;
+>	} while (tolower(choice[0]) == 'y');
+>	return 0;
+> }
+> ```
 
 ## 5.5 跳转语句
 ### 5.5.1 break语句
 #### 练习5.20
 编写一段程序，从标准输入中读取`string`对象的序列直到连续出现两个相同的单词或者所有的单词都读完为止。使用`while`循环一次读取一个单词，当一个单词连续出现两次时使用`break`语句终止循环。输出连续重复出现的单词，或者输出一个消息说明没有任何单词是连续重复出现的。
-```cpp
-#include <iostream>
-#include <string>
-using std::cout; using std::cin; using std::endl; using std::string;
-
-int main()
-{
-	string read, tmp;
-	while (cin >> read)
-		if (read == tmp) 
-			break; 
-		else 
-			tmp = read;
-
-	if (cin.eof())  
-		cout << "no word was repeated." << endl;
-	else            
-		cout << read << " occurs twice in succession." << endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> using std::cout;
+> using std::cin; 
+> using std::endl; 
+> using std::string;
+>
+> int main()
+> {
+>	string read, tmp;
+>	while (cin >> read)
+>		if (read == tmp) 
+>			break; 
+>		else 
+>			tmp = read;
+>
+>	if (cin.eof())  
+>		cout << "no word was repeated." << endl;
+>	else            
+>		cout << read << " occurs twice in succession." << endl;
+>	return 0;
+> }
+> ```
 
 ### 5.5.2 continue语句
 #### 练习5.21
 修改5.5.1节练习题的程序，使其找到的重复单词必须以大写字母开头。
-```cpp
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-int main()
-{
-	string curr, prev;
-	bool twice = false;
-	while (cin >> curr)
-	{
-		if (isupper(curr[0]) && prev == curr)
-		{
-			cout << curr << ": occurs twice in succession." << endl;
-			twice = true;
-			break;
-		}
-		prev = curr;
-	}
-	if (!twice)
-		cout << "no word was repeated." << endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> using namespace std;
+>
+> int main()
+> {
+>	string curr, prev;
+>	bool twice = false;
+>	while (cin >> curr)
+>	{
+>		if (isupper(curr[0]) && prev == curr)
+>		{
+>			cout << curr << ": occurs twice in succession." << endl;
+>			twice = true;
+>			break;
+>		}
+>		prev = curr;
+>	}
+>	if (!twice)
+>		cout << "no word was repeated." << endl;
+>	return 0;
+> }
+> ```
 
 ### 5.5.3 goto语句
 #### 练习5.22
 本节的最后一个例子跳回到`begin`，其实使用循环能更好的完成该任务，重写这段代码，注意不再使用`goto`语句。
-```cpp
-for (int sz = get_size(); sz <=0; sz = get_size())
-    ;
-```
+> ```cpp
+> for (int sz = get_size(); sz <=0; sz = get_size())
+>    ;
+> ```
 
 ## 5.6 try语句块和异常处理
 ### 5.6.1 throw表达式
@@ -2504,79 +2502,82 @@ for (int sz = get_size(); sz <=0; sz = get_size())
 ### 5.6.3 标准异常
 #### 练习5.23
 编写一段程序，从标准输入读取两个整数，输出第一个数除以第二个数的结果。
-```cpp
-#include <iostream>
-using std::cin;
-using std::cout;
-using std::endl;
-
-int main()
-{
-	int i, j;
-	cin >> i >> j;
-	cout << i / j << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cin;
+> using std::cout;
+> using std::endl;
+>
+> int main()
+> {
+>	int i, j;
+>	cin >> i >> j;
+>	cout << i / j << endl;
+>
+>	return 0;
+> }
+> ```
 
 
 #### 练习5.24
 修改你的程序，使得当第二个数是`0`时抛出异常。先不要设定`catch`子句，运行程序并真的为除数输入`0`，看看会发生什么？
-```cpp
-#include <iostream>
-#include <stdexcept>
-
-int main(void)
-{
-	int i, j;
-	std::cin >> i >> j;
-	if (j == 0)
-		throw std::runtime_error("divisor is 0");
-	std::cout << i / j << std::endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <stdexcept>
+> using std::cin;
+> using std::cout;
+> using std::endl;
+> using std::runtime_error;
+> 
+> int main(void)
+> {
+>	int i, j;
+>	cin >> i >> j;
+>	if (j == 0)
+>		throw runtime_error("divisor is 0");
+>	cout << i / j << endl;
+>
+>	return 0;
+> }
+> ```
 
 
 #### 练习5.25
 修改上一题的程序，使用`try`语句块去捕获异常。`catch`子句应该为用户输出一条提示信息，询问其是否输入新数并重新执行`try`语句块的内容。
-```cpp
-#include <iostream>
-#include <stdexcept>
-using std::cin;
-using std::cout; 
-using std::endl; 
-using std::runtime_error;
-
-int main()
-{
-	int i, j;
-	cout << "please input tow numbers: " << endl;
-	while (cin >> i >> j)
-	{
-		try
-		{
-			if (j == 0)
-				throw runtime_error("divisor is 0");
-			cout << i / j << endl;
-		}
-		catch (runtime_error err)
-		{
-			cout << err.what() << "\nTry Again? Enter y or n" << endl;
-			char c;
-			cin >> c;
-			if (c != 'y')
-				break;
-		}
-		cout << "please input tow numbers: " << endl;
-	}
-
-	return 0;
-}
-```
-
+> ```cpp
+> #include <iostream>
+> #include <stdexcept>
+> using std::cin;
+> using std::cout; 
+> using std::endl; 
+> using std::runtime_error;
+>
+> int main()
+> {
+>	int i, j;
+>	cout << "please input tow numbers: " << endl;
+>	while (cin >> i >> j)
+>	{
+>		try
+>		{
+>			if (j == 0)
+>				throw runtime_error("divisor is 0");
+>			cout << i / j << endl;
+>		}
+>		catch (runtime_error err)
+>		{
+>			cout << err.what() << "\nTry Again? Enter y or n" << endl;
+>			char c;
+>			cin >> c;
+>			if (c != 'y')
+>				break;
+>		}
+>		cout << "please input tow numbers: " << endl;
+>	}
+>
+>	return 0;
+> }
+> ```
 
 
 # 第六章 函数
@@ -2598,65 +2599,68 @@ int main()
 (d) double square (double x)  return x * x; 
 ```
 > 应该改为下面这样：
-```cpp
-(a) string f() {
-          string s;
-          // ...
-          return s;
-    }
-(b) void f2(int i) { /* ... */ }
-(c) int calc(int v1, int v2) { /* ... */ }
-(d) double square (double x) { return x * x; }
-```
+> ```cpp
+> (a) string f() {
+>          string s;
+>          // ...
+>          return s;
+>    }
+> (b) void f2(int i) { /* ... */ }
+> (c) int calc(int v1, int v2) { /* ... */ }
+> (d) double square (double x) { return x * x; }
+> ```
+
 #### 练习6.3
 编写你自己的`fact`函数，上机检查是否正确。
-```cpp
-#include <iostream>
-int fact(int i)
-{
-	if (i > 1)
-		return 1;
-	else
-		return i * fact(i - 1);
-}
-int main()
-{
-	std::cout << fact(5) << std::endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> int fact(int i)
+> {
+>	if (i > 1)
+>		return 1;
+>	else
+>		return i * fact(i - 1);
+> }
+> int main()
+> {
+>	std::cout << fact(5) << std::endl;
+>	return 0;
+> }
+> ```
 
 #### 练习6.4
 编写一个与用户交互的函数，要求用户输入一个数字，计算生成该数字的阶乘。在`main`函数中调用该函数。
-```cpp
-#include <iostream>
-#include <string>
-using namespace std;
-int fact(int i)
-{
-	if (i > 1)
-		return 1;
-	else
-		return i * fact(i - 1);
-}
-int main(){
-	string const prompt = "Enter a number :\n";
-	for (int i; cout << prompt, cin >> i;)
-	{
-		cout << fact(i) << endl;
-	}
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> using namespace std;
+> 
+> int fact(int i)
+> {
+>	if (i > 1)
+>		return 1;
+>	else
+>		return i * fact(i - 1);
+> }
+> 
+> int main(){
+>	string const prompt = "Enter a number :\n";
+>	for (int i; cout << prompt, cin >> i;)
+>	{
+>		cout << fact(i) << endl;
+>	}
+>	return 0;
+> }
+> ```
 
 #### 练习6.5
 编写一个函数输出其实参的绝对值。
-```cpp
-int abs(int i)
-{
-    return i > 0 ? i : -i;
-}
-```
+> ```cpp
+> int abs(int i)
+> {
+>    return i > 0 ? i : -i;
+> }
+> ```
 
 ### 6.1.1 局部对象
 说明形参、局部变量以及局部静态变量的区别。编写一个函数，同时达到这三种形式。
@@ -2666,27 +2670,27 @@ int abs(int i)
 
 ## 练习6.7
 编写一个函数，当它第一次被调用时返回`0`，以后每次被调用返回值加`1`。
-```cpp
-int ascending()
-{
-	static int num = 0;
-	return num++;
-}
-```
+> ```cpp
+> int ascending()
+> {
+> 	static int num = 0;
+>	return num++;
+> }
+> ```
 
 ### 6.1.2 函数声明
 #### 练习6.8
 编写一个名为`Chapter6.h`的头文件，令其包含6.1节练习中的函数。
-```cpp
-int fact(int val);
-int func();
-
-template <typename T>
-T abs(T i)
-{
-	return i >= 0 ? i : -i;
-}
-```
+> ```cpp
+> int fact(int val);
+> int func();
+> 
+> template <typename T>
+> T abs(T i)
+> {
+>	return i >= 0 ? i : -i;
+> }
+> ```
 
 ### 6.1.3 分离式编译
 
@@ -2694,66 +2698,66 @@ T abs(T i)
 ### 6.2.1 传值参数
 #### 练习6.10
 编写一个函数，使用指针形参交换两个整数的值。在代码中调用该函数并输出交换后的结果，以此验证函数的正确性。
-```cpp
-#include <iostream>
-using std::cout;
-using std::cin;
-using std::endl;
-
-void swap(int* a, int* b)
-{
-	int tmp;
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-int main()
-{
-	int a, b;
-	cout << "Please enter the numbers: \n";
-	cin >> a >> b;
-
-	swap(&a, &b)
-	cout << a << " " << b << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cout;
+> using std::cin;
+> using std::endl;
+>
+> void swap(int* a, int* b)
+> {
+>	int tmp;
+>	tmp = *a;
+>	*a = *b;
+>	*b = tmp;
+> }
+>
+> int main()
+> {
+>	int a, b;
+>	cout << "Please enter the numbers: \n";
+>	cin >> a >> b;
+>
+>	swap(&a, &b)
+>	cout << a << " " << b << endl;
+>
+>	return 0;
+> }
+> ```
 
 ### 6.2.2 传引用参数
 #### 练习6.11]
-编写并验证你自己的reset函数，使其作用于引用类型的参数。
-```cpp
-void reset(int &i)
-{
-	i = 0;
-}
-```
+编写并验证你自己的`reset`函数，使其作用于引用类型的参数。
+> ```cpp
+> void reset(int &i)
+> {
+>	i = 0;
+> }
+> ```
 
 #### 练习6.12
 改写6.2.1节练习中的程序，使其引用而非指针交换两个整数的值。你觉得哪种方法更易于使用呢？为什么？
-```cpp
-void swap(int& a, int& b)
-{
-	int tmp;
-	tmp = a;
-	a = b;
-	b = tmp;
-}
-
-int main()
-{
-	int a, b;
-	cout << "Please enter the numbers: \n";
-	cin >> a >> b;
-
-	swap(a, b)
-	cout << a << " " << b << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> void swap(int& a, int& b)
+> {
+>	int tmp;
+>	tmp = a;
+>	a = b;
+>	b = tmp;
+> }
+>
+> int main()
+> {
+>	int a, b;
+>	cout << "Please enter the numbers: \n";
+>	cin >> a >> b;
+>
+>	swap(a, b)
+>	cout << a << " " << b << endl;
+>
+>	return 0;
+> }
+> ```
 > 引用更好。
 
 #### 练习6.13
@@ -2764,21 +2768,21 @@ int main()
 ## 练习6.14
 举一个形参应该是引用类型的例子，再举一个形参不能是引用类型的例子。
 > 例如交换两个整数的函数，形参应该是引用
-```cpp
-void swap(int& lhs, int& rhs)
-{
-	int temp = lhs;
-	lhs = rhs;
-	rhs = temp;
-}
-```
+> ```cpp
+> void swap(int& lhs, int& rhs)
+> {
+>	int temp = lhs;
+>	lhs = rhs;
+>	rhs = temp;
+> }
+> ```
 > 当实参的值是右值时，形参不能为引用类型
-```cpp
-int add(int a, int b)
-{
-	return a + b;
-}
-```
+> ```cpp
+> int add(int a, int b)
+> {
+>	return a + b;
+> }
+> ```
 
 ## 练习6.15
 说明`find_char`函数中的三个形参为什么是现在的类型，特别说明为什么`s`是常量引用而`occurs`是普通引用？为什么`s`和`occurs`是引用类型而`c`不是？如果令`s`是普通引用会发生什么情况？如果令`occurs`是常量引用会发生什么情况？
@@ -2795,15 +2799,15 @@ int add(int a, int b)
 bool is_empty(string& s) { return s.empty(); }
 ```
 > 局限性在于**常量字符串**和**字符串字面值**无法作为该函数的实参，如果下面这样调用是非法的：
-```cpp
-const string str;
-bool flag = is_empty(str); //非法
-bool flag = is_empty("hello"); //非法
-```
+> ```cpp
+> const string str;
+> bool flag = is_empty(str); //非法
+> bool flag = is_empty("hello"); //非法
+> ```
 > 所以要将这个函数的形参定义为常量引用：
-```cpp
-bool is_empty(const string& s) { return s.empty(); }
-```
+> ```cpp
+> bool is_empty(const string& s) { return s.empty(); }
+> ```
 
 #### 练习6.17
 编写一个函数，判断`string`对象中是否含有大写字母。编写另一个函数，把`string`对象全部改写成小写形式。在这两个函数中你使用的形参类型相同吗？为什么？
@@ -2825,10 +2829,10 @@ bool is_empty(const string& s) { return s.empty(); }
 为下面的函数编写函数声明，从给定的名字中推测函数具备的功能。
 - (a) 名为`compare`的函数，返回布尔值，两个参数都是`matrix`类的引用。 
 - (b) 名为`change_val`的函数，返回`vector<int>`的迭代器，有两个参数：一个是`int`，另一个是`vector<int>`的迭代器。
-```cpp
-(a) bool compare(matrix &m1, matrix &m2);
-(b) vector<int>::iterator change_val(int, vector<int>::iterator);
-```
+> ```cpp
+> (a) bool compare(matrix &m1, matrix &m2);
+> (b) vector<int>::iterator change_val(int, vector<int>::iterator);
+> ```
 
 ## 练习6.19
 假定有如下声明，判断哪个调用合法、哪个调用不合法。对于不合法的函数调用，说明原因。
@@ -2874,72 +2878,75 @@ vector<int> vec(10);
 
 #### 练习6.22
 编写一个函数，令其交换两个`int`指针。
-```cpp
-#include <iostream>
-#include <string>
-void swap(int*& lft, int*& rht)
-{
-	auto tmp = lft;
-	lft = rht;
-	rht = tmp;
-}
-int main()
-{
-	int i = 42, j = 99;
-	auto lft = &i;
-	auto rht = &j;
-	swap(lft, rht);
-	std::cout << *lft << " " << *rht << std::endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> void swap(int*& lft, int*& rht)
+> {
+>	auto tmp = lft;
+>	lft = rht;
+>	rht = tmp;
+> }
+> int main()
+> {
+>	int i = 42, j = 99;
+>	auto lft = &i;
+>	auto rht = &j;
+>	swap(lft, rht);
+>	std::cout << *lft << " " << *rht << std::endl;
+>	return 0;
+> }
+> ```
 
 #### 练习6.23
 参考本节介绍的几个`print`函数，根据理解编写你自己的版本。依次调用每个函数使其输入下面定义的`i`和`j`:
 ```cpp
 int i = 0, j[2] = { 0, 1 };
 ```
-```cpp
-#include <iostream>
-using std::cout; using std::endl; using std::begin; using std::end;
-
-void print(int i)
-{
-	cout << i << endl;
-}
-
-void print(const int *beg, const int *end)
-{
-	while (beg != end)
-		cout << *beg++ << endl;
-}
-
-void print(const int ia[], size_t size)
-{
-	for (size_t i = 0; i != size; ++i)
-	{
-		cout << ia[i] << endl;
-	}
-}
-
-void print(int (&arr)[2])
-{
-	for (auto i : arr)
-		cout << i << endl;
-}
-
-int main()
-{
-	int i = 0, j[2] = { 0, 1 };
-
-	print(i);
-	print(begin(j), end(j));
-	print(j, end(j) - begin(j));
-	print(j);
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cout; 
+> using std::endl; 
+> using std::begin; 
+> using std::end;
+>
+> void print(int i)
+> {
+>	cout << i << endl;
+> }
+>
+> void print(const int *beg, const int *end)
+> {
+>	while (beg != end)
+>		cout << *beg++ << endl;
+> }
+>
+> void print(const int ia[], size_t size)
+> {
+>	for (size_t i = 0; i != size; ++i)
+>	{
+>		cout << ia[i] << endl;
+>	}
+> }
+>
+> void print(int (&arr)[2])
+> {
+>	for (auto i : arr)
+>		cout << i << endl;
+> }
+>
+> int main()
+> {
+>	int i = 0, j[2] = { 0, 1 };
+>
+>	print(i);
+>	print(begin(j), end(j));
+>	print(j, end(j) - begin(j));
+>	print(j);
+>
+>	return 0;
+> }
+> ```
 
 ## 练习6.24
 描述下面这个函数的行为。如果代码中存在问题，请指出并改正。
@@ -2951,34 +2958,33 @@ void print(const int ia[10])
 }
 ```
 > 当数组作为实参的时候，会被自动转换为指向首元素的指针。因此函数形参接受的是一个指针。如果要让这个代码成功运行，可以将实参改为数组的引用。
-```cpp
-void print(const int (&ia)[10])
-{
-	for (size_t i = 0; i != 10; ++i)
-		cout << ia[i] << endl;
-}
-```
+> ```cpp
+> void print(const int (&ia)[10])
+> {
+>	for (size_t i = 0; i != 10; ++i)
+>		cout << ia[i] << endl;
+> }
+> ```
 
 ### 6.2.5 main：处理命令行选项
 #### 练习6.25
 编写一个`main`函数，令其接收两个实参。把实参的内容连接成一个`string`对象并输出出来。
-```cpp
-#include <iostream>
-#include <string>
-using std::cout;
-using std::string;
-using std::endl;
-
-int main(int argc, char const *argv[])
-{
-    string s;
-    for (int i = 1; i != argc; ++i)
-		s += string(argv[i]) + " ";
-    cout << s;
-    return 0;
-}
-
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> using std::cout;
+> using std::string;
+> using std::endl;
+>
+> int main(int argc, char const *argv[])
+> {
+>    string s;
+>    for (int i = 1; i != argc; ++i)
+>		s += string(argv[i]) + " ";
+>    cout << s;
+>    return 0;
+> }
+> ```
 
 #### 练习6.26
 编写一个程序，使其接收本节所示的选项；输出传递给`main`函数的实参的内容。
@@ -2987,25 +2993,25 @@ int main(int argc, char const *argv[])
 ### 6.2.6 含有可变形参的函数
 #### 练习6.27
 编写一个函数，它的参数是`initializer_list<int>`类型的对象，函数的功能是计算列表中所有元素的和。
-```cpp
-#include <iostream>
-#include <initializer_list>
-
-int sum(std::initializer_list<int> const& il)
-{
-	int sum = 0;
-	for (auto i : il) 
-		sum += i;
-	return sum;
-}
-int main(void)
-{
-	auto il = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	std::cout << sum(il) << std::endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <initializer_list>
+>
+> int sum(std::initializer_list<int> const& il)
+> {
+>	int sum = 0;
+>	for (auto i : il) 
+>		sum += i;
+>	return sum;
+> }
+> int main(void)
+> {
+>	auto il = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+>	std::cout << sum(il) << std::endl;
+>
+>	return 0;
+> }
+> ```
 
 ## 练习6.28
 在`error_msg`函数的第二个版本中包含`ErrCode`类型的参数，其中循环内的`elem`是什么类型？
@@ -3060,12 +3066,12 @@ decltype(s)& fun();
 
 #### 练习6.38
 修改`arrPtr`函数，使其返回数组的引用。
-```cpp
-decltype(odd)& arrPtr(int i)
-{
-    return (i % 2) ? odd : even;
-}
-```
+> ```cpp
+> decltype(odd)& arrPtr(int i)
+> {
+>    return (i % 2) ? odd : even;
+> }
+> ```
 
 ## 6.4 函数重载
 #### 练习6.39 
@@ -3101,33 +3107,33 @@ char *init(int ht, int wd = 80, char bckgrnd = ' ');
 ```
 
 > - (a) 非法。第一个参数不是默认参数，最少需要一个实参。
-* (b) 合法。
-* (c) 合法，但与初衷不符。字符 `*` 被解释成 `int` 传入到了第二个参数。而初衷是要传给第三个参数。
+> - (b) 合法。
+> - (c) 合法，但与初衷不符。字符 `*` 被解释成 `int` 传入到了第二个参数。而初衷是要传给第三个参数。
 
 #### 练习6.42
 给`make_plural`函数的第二个形参赋予默认实参`'s'`, 利用新版本的函数输出单词`success`和`failure`的单数和复数形式。
-```cpp
-#include <iostream>
-#include <string>
-using std::string;
-using std::cout;
-using std::endl;
-
-string make_plural(size_t ctr, const string& word, const string& ending = "s")
-{
-	return (ctr > 1) ? word + ending : word;
-}
-
-int main()
-{
-	cout << "singual: " << make_plural(1, "success", "es") << " "
-		<< make_plural(1, "failure") << endl;
-	cout << "plural : " << make_plural(2, "success", "es") << " "
-		<< make_plural(2, "failure") << endl;
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <string>
+> using std::string;
+> using std::cout;
+> using std::endl;
+>
+> string make_plural(size_t ctr, const string& word, const string& ending = "s")
+> {
+>	return (ctr > 1) ? word + ending : word;
+> }
+>
+> int main()
+> {
+>	cout << "singual: " << make_plural(1, "success", "es") << " "
+>		<< make_plural(1, "failure") << endl;
+>	cout << "plural : " << make_plural(2, "success", "es") << " "
+>		<< make_plural(2, "failure") << endl;
+>
+>	return 0;
+> }
+> ```
 
 ### 6.5.2 内联函数和constexpr函数
 #### 练习6.43 
@@ -3140,12 +3146,12 @@ int main()
 
 #### 练习6.44
 将6.22节（第189页）的`isShorter`函数改写成内联函数。
-```cpp
-inline bool is_shorter(const string &lft, const string &rht) 
-{
-    return lft.size() < rht.size();
-}
-```
+> ```cpp
+> inline bool is_shorter(const string &lft, const string &rht) 
+> {
+>    return lft.size() < rht.size();
+> }
+> ```
 
 #### 练习6.45
 回顾在前面的练习中你编写的那些函数，它们应该是内联函数吗？如果是，将它们改写成内联函数；如果不是，说明原因。
@@ -3158,34 +3164,34 @@ inline bool is_shorter(const string &lft, const string &rht)
 ### 6.5.3 调试帮助
 #### 练习6.47
 改写6.3.2（第205页）练习中使用递归输出`vector`内容的程序，使其有条件地输出与执行过程有关的信息。例如，每次调用时输出`vector`对象的大小。分别在打开和关闭调试器的情况下编译并执行这个程序。
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-using c_iter = vector<int>::const_iterator;
-#define NDEBUG
-
-void print(c_iter first, c_iter last)
-{
-#ifndef NDEBUG
-	cout << "vector size: " << last - first << endl;
-#endif
-	if (first == last)
-	{
-		cout << "over!" << endl;
-		return;
-	}
-	cout << *first << " ";
-	print(++first, last);
-
-}
-int main()
-{
-	vector<int> vec{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	print(vec.cbegin(), vec.cend());
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> using namespace std;
+> using c_iter = vector<int>::const_iterator;
+> #define NDEBUG
+>
+> void print(c_iter first, c_iter last)
+> {
+> #ifndef NDEBUG
+>	cout << "vector size: " << last - first << endl;
+> #endif
+> 	if (first == last)
+>	{
+>		cout << "over!" << endl;
+>		return;
+>	}
+>	cout << *first << " ";
+>	print(++first, last);
+> }
+> 
+> int main()
+> {
+>	vector<int> vec{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+>	print(vec.cbegin(), vec.cend());
+>	return 0;
+> }
+> ```
 
 #### 练习6.48
 说明下面这个循环的含义，他对`assert`的使用合理吗？
@@ -3220,41 +3226,41 @@ assert(cin);
 
 #### 练习6.51
 编写函数`f`的4个版本，令其各输出一条可以区分的消息。验证上一个练习的答案，如果你的回答错了，反复研究本节内容直到你弄清自己错在何处。
-```cpp
-#include <iostream>
-using std::cout;
-using std::endl;
-
-void f()
-{
-	cout << "f()" << endl;
-}
-
-void f(int)
-{
-	cout << "f(int)" << endl;
-}
-
-void f(int, int)
-{
-	cout << "f(int, int)" << endl;
-}
-
-void f(double, double)
-{
-	cout << "f(double, double)" << endl;
-}
-
-int main()
-{
-	//f(2.56, 42);
-	f(42);
-	f(42, 0);
-	f(2.56, 3.14);
-
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> using std::cout;
+> using std::endl;
+>
+> void f()
+> {
+>	cout << "f()" << endl;
+> }
+>
+> void f(int)
+> {
+>	cout << "f(int)" << endl;
+> }
+>
+> void f(int, int)
+> {
+>	cout << "f(int, int)" << endl;
+> }
+>
+> void f(double, double)
+> {
+>	cout << "f(double, double)" << endl;
+> }
+>
+> int main()
+> {
+>	//f(2.56, 42);
+>	f(42);
+>	f(42, 0);
+>	f(2.56, 3.14);
+>
+>	return 0;
+> }
+> ```
 
 ### 6.6.1 实参类型转换
 #### 练习6.52
@@ -3285,51 +3291,51 @@ double dobj;
 ## 6.7 函数指针
 #### 练习6.54
 编写函数的声明，令其接受两个`int`形参并返回类型也是`int`；然后声明一个`vector`对象，令其元素是指向该函数的指针。
-```cpp
-int func(int, int);
-vector<decltype(func)*> v;
-```
+> ```cpp
+> int func(int, int);
+> vector<decltype(func)*> v;
+> ```
 
 ## 练习6.55
 编写4个函数，分别对两个`int`值执行加、减、乘、除运算；在上一题创建的`vector`对象中保存指向这些函数的指针。
-```cpp
-int add(int a, int b) { return a + b; }
-int subtract(int a, int b) { return a - b; }
-int multiply(int a, int b) { return a * b; }
-int divide(int a, int b) { return b != 0 ? a / b : 0; }
-
-v.push_back(add);
-v.push_back(subtract);
-v.push_back(multiply);
-v.push_back(divide);
-```
+> ```cpp
+> int add(int a, int b) { return a + b; }
+> int subtract(int a, int b) { return a - b; }
+> int multiply(int a, int b) { return a * b; }
+> int divide(int a, int b) { return b != 0 ? a / b : 0; }
+>
+> v.push_back(add);
+> v.push_back(subtract);
+> v.push_back(multiply);
+> v.push_back(divide);
+> ```
 
 #### 练习6.56
 调用上述`vector`对象中的每个元素并输出结果。
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int add(int a, int b) { return a + b; }
-int subtract(int a, int b) { return a - b; }
-int multiply(int a, int b) { return a * b; }
-int divide(int a, int b) { return b != 0 ? a / b : 0; }
-
-int main()
-{
-	int func(int, int);
-	vector<decltype(func)*> v;
-	v.push_back(add);
-	v.push_back(subtract);
-	v.push_back(multiply);
-	v.push_back(divide);
-	
-	for (auto i : v)
-	{
-		cout << i(6, 2) << " "; 
-	}
-	cout << endl;
-	return 0;
-}
-```
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> using namespace std;
+>
+> int add(int a, int b) { return a + b; }
+> int subtract(int a, int b) { return a - b; }
+> int multiply(int a, int b) { return a * b; }
+> int divide(int a, int b) { return b != 0 ? a / b : 0; }
+> 
+> int main()
+> {
+> 	int func(int, int);
+>	vector<decltype(func)*> v;
+>	v.push_back(add);
+>	v.push_back(subtract);
+>	v.push_back(multiply);
+>	v.push_back(divide);
+>	
+>	for (auto i : v)
+>	{
+>		cout << i(6, 2) << " "; 
+>	}
+>	cout << endl;
+>	return 0;
+> }
+> ```
