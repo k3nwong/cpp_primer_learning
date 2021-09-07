@@ -3339,3 +3339,329 @@ double dobj;
 >	return 0;
 > }
 > ```
+
+# 第七章类
+## 7.1 定义抽象数据类型
+### 7.1.1 设计Sales_data类
+#### 练习7.1
+使用2.6.1节定义的`Sales_data`类为1.6节的交易处理程序编写一个新版本。
+> ```cpp
+> #include <iostream>
+> #include <string>
+> using std::cin;
+> using std::cout; 
+> using std::endl; 
+> using std::string;
+>
+> struct Sales_data
+> {
+>	string bookNo;
+>	unsigned units_sold = 0;
+>	double revenue = 0.0;
+> };
+>
+> int main()
+> {
+>	Sales_data total;
+>	if (cin >> total.bookNo >> total.units_sold >> total.revenue)
+>	{
+>		Sales_data trans;
+>		while (cin >> trans.bookNo >> trans.units_sold >> trans.revenue)
+> 		{
+>			if (total.bookNo == trans.bookNo)
+>			{
+>				total.units_sold += trans.units_sold;
+>				total.revenue += trans.revenue;
+>			}
+>			else
+>			{
+>				cout << total.bookNo << " " << total.units_sold << " " << total.revenue << endl;
+>				total = trans;
+>			}
+>		}
+>		cout << total.bookNo << " " << total.units_sold << " " << total.revenue << endl;
+>	}
+>	else
+>	{
+>		std::cerr << "No data?!" << std::endl;
+>		return -1;
+>	}
+>	return 0;
+> }
+> ```
+
+
+## 7.1 定义抽象数据类型
+#### 练习7.2
+曾在2.6.2节的练习（第67页）中编写了一个`Sales_data`类，请向这个类添加`combine`和`isbn`成员。
+> ```cpp
+> #include <string>
+>
+> struct Sales_data
+> {
+>	std::string isbn() const { return bookNo; };
+>	Sales_data& combine(const Sales_data&);
+>
+>	std::string bookNo;
+>	unsigned units_sold = 0;
+>	double revenue = 0.0;
+> };
+>
+> Sales_data& Sales_data::combine(const Sales_data& rhs)
+> {
+> 	units_sold += rhs.units_sold;
+>	revenue += rhs.revenue;
+>	return *this;
+> }
+> ```
+
+#### 练习7.3
+修改7.1.1（第229页）的交易处理程序，令其使用这些成员。
+> ```cpp
+> #include <string>
+> #include <iostream>
+> using std::cin; 
+> using std::cout; 
+> using std::endl;
+> using std::string;
+> using std::cerr;
+> 
+> struct Sales_data
+> {
+>	string isbn() const { return bookNo; };
+>	Sales_data& combine(const Sales_data&);
+>
+>	string bookNo;
+>	unsigned units_sold = 0;
+>	double revenue = 0.0;
+> };
+> 
+> Sales_data& Sales_data::combine(const Sales_data& rhs)
+> {
+>	units_sold += rhs.units_sold;
+> 	revenue += rhs.revenue;
+>	return *this;
+> }
+> 
+> int main()
+> {
+> 	Sales_data total;
+>	if (cin >> total.bookNo >> total.units_sold >> total.revenue)
+>	{
+>		Sales_data trans;
+>		while (cin >> trans.bookNo >> trans.units_sold >> trans.revenue)
+>		{
+>			if (total.isbn() == trans.isbn())
+>				total.combine(trans);
+>			else
+>			{
+>				cout << total.bookNo << " " << total.units_sold << " " << total.revenue << endl;
+>				total = trans;
+>			}
+>		}
+>		cout << total.bookNo << " " << total.units_sold << " " << total.revenue << endl;
+>	}
+>	else
+>	{
+>		cerr << "No data?!" << endl;
+>		return -1;
+>	}
+>
+>	return 0;
+> }
+> ```
+
+#### 练习7.4
+编写一个名为`Person`的类，使其表示人员的姓名和住址。使用`string`对象存放这些元素，接下来的练习将不断充实这个类的其他特征。
+> ```cpp
+> #include <string>
+> using std::string;
+>
+> class Person{
+>   string name;
+>   string addr;
+> };
+> ```
+
+#### 练习7.5
+在你的`Person`类中提供一些操作使其能够返回姓名和住址。这些函数是否应该是`const`？请解释原因。
+> ```cpp
+> #include <string>
+> using std::string;
+>
+> class Person{
+>   string name;
+>   string addr;
+>   auto getname() const -> string const& { return name; }
+>   auto getaddr() const -> string const& { return addr; }   
+> };
+> ```
+> 应该是`const`，不论返回姓名还是返回地址，在函数体内都只是读取数据成员的值，而不会做任何改变。
+
+### 7.1.3 定义类相关的非成员函数
+#### 练习7.6
+对于函数`add`、`read`、`print`定义你自己的版本。
+> ```cpp
+> #include <string>
+> #include <iostream>
+> using std::string;
+> using std::istream;
+> using std::ostream;
+> 
+> struct Sales_data
+> {
+>	string const& isbn() const { return bookNo; };
+>	Sales_data& combine(const Sales_data&);
+>
+>	string bookNo;
+>	unsigned units_sold = 0;
+>	double revenue = 0.0;
+> };
+>
+> Sales_data& Sales_data::combine(const Sales_data& rhs)
+> {
+>	units_sold += rhs.units_sold;
+>	revenue += rhs.revenue;
+>	return *this;
+> }
+>
+> istream &read(istream &is, Sales_data &item)
+> {
+> 	double price = 0;
+>	is >> item.bookNo >> item.units_sold >> price;
+>	item.revenue = price * item.units_sold;
+>	return is;
+> }
+> 
+> ostream &print(ostream &os, const Sales_data &item)
+> {
+>	os << item.isbn() << " " << item.units_sold << " " << item.revenue;
+> 	return os;
+> }
+>
+> Sales_data add(const Sales_data &lhs, const Sales_data &rhs)
+> {
+> 	Sales_data sum = lhs;
+>	sum.combine(rhs);
+>	return sum;
+> }
+> ```
+
+#### 练习7.7
+使用这些新函数重写7.1.2（第233页）练习中的交易处理程序。
+> ```cpp
+> #include <string>
+> #include <iostream>
+> using std::string;
+> using std::istream;
+> using std::ostream;
+> using std::cerr;
+> 
+> struct Sales_data
+> {
+>	string const& isbn() const { return bookNo; };
+>	Sales_data& combine(const Sales_data&);
+>
+>	string bookNo;
+>	unsigned units_sold = 0;
+>	double revenue = 0.0;
+> };
+>
+> Sales_data& Sales_data::combine(const Sales_data& rhs)
+> {
+>	units_sold += rhs.units_sold;
+>	revenue += rhs.revenue;
+>	return *this;
+> }
+>
+> istream &read(istream &is, Sales_data &item)
+> {
+> 	double price = 0;
+>	is >> item.bookNo >> item.units_sold >> price;
+>	item.revenue = price * item.units_sold;
+>	return is;
+> }
+> 
+> ostream &print(ostream &os, const Sales_data &item)
+> {
+>	os << item.isbn() << " " << item.units_sold << " " << item.revenue;
+> 	return os;
+> }
+>
+> Sales_data add(const Sales_data &lhs, const Sales_data &rhs)
+> {
+> 	Sales_data sum = lhs;
+>	sum.combine(rhs);
+>	return sum;
+> }
+> 
+> int main()
+> {
+>	Sales_data total;
+>	if (read(cin, total))
+>	{
+>		Sales_data trans;
+>		while (read(cin, trans))
+>		{
+>			if (total.isbn() == trans.isbn())
+>				total.combine(trans);
+>			else
+>			{
+>				print(cout, total) << endl;
+>				total = trans;
+>			}
+>		}
+>		print(cout, total) << endl;
+>	}
+>	else
+>	{
+>		cerr << "No data?!" << endl;
+>		return -1;
+>	}
+>
+>	return 0;
+> }
+> ```
+
+#### 练习7.8
+为什么`read`函数将其`Sales_data`定义为普通的引用，而`print`将其参数定义为常量引用？
+> 因为`read`函数会改变对象的内容，而`print`函数不会。
+
+#### 练习7.9
+对于7.1.2（第233页）练习中的代码，添加读取和打印`Person`对象的操作。
+> ```cpp
+> #include <iostream>
+> #inclde <string>
+> using std::cout;
+> using std::cin;
+> using std::endl;
+> using std::string;
+> using std::istream;
+> using std::ostream;
+>
+> class Person{
+>   string name;
+>   string addr;
+>   auto getname() const -> string const& { return name; }
+>   auto getaddr() const -> string const& { return addr; }   
+> };
+> 
+> istream &read(istream &is, Person &person)
+> {
+>   return is >> person.name >> person.addr;
+> }
+> 
+> ostream &print(ostream &os, const Person &person)
+> {
+>   return os << person.name << " " << person.addr;
+> }
+> ```
+
+#### 练习7.10
+在下面这条`if`语句中，条件部分的作用是什么？
+```cpp
+if (read(read(cin, data1), data2))
+```
+> `if`语句中条件部分的作用是从输入流中读取数据给两个`data`对象。
+
+### 7.1.4 构造函数

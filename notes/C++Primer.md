@@ -1610,3 +1610,77 @@ int (*f1(int))(int*, int);
 ```cpp
 auto f1(int) -> int (*)(int*, int);
 ```
+
+# 第七章 类
+类的基本思想是 **数据抽象** 和 **封装**。 数据抽象是一种依赖 **接口** 和 **实现** 分离的编程（以及设计）技术。类的接口包括用户所能执行的操作；类的实现则包括类的数据成员、负责接口实现的函数体以及定义类所需的各种私有函数。
+
+封装实现了类的接口和实现的分离。封装后的类隐藏了它实现细节。
+
+## 7.1 定义抽象数据类型
+### 7.1.1 设计Sales_data类
+
+### 7.1.2 定义改进的Sales_data类
+成员函数的声明必须在类的内部，它的定义既可以在类的内部也可以在类的外部。作为接口组成部分的非成员函数，它们的定义和声明都在类的外部。
+```cpp
+struct Sales_data{
+  std::string isbn() const { return bookNo; }
+  Sales_data combine(const Sales_data&);
+  double avg_price() const;
+  std::string bookNo;
+  unsigned units_sold = 0;
+  double revenue = 0.0;
+}
+//Sales_data的非成员接口函数
+Sales_data add(const Sales_data&, const Sales_data&);
+std::ostream &print(std::ostream&, const Sales_data&);
+std::istream &read(std::istream&, Sales_data&);
+```
+> 定义在内部的函数是隐式的`inline`函数
+
+#### 7.1.2.1 引入this
+成员函数通过一个名为`this`的额外的隐式参数来访问调用它的哪个对象。当我们调用一个成员函数时，用请求该函数的对象地址初始化`this`。`this`是一个常量指针，其总是指向该对象。
+
+在成员函数内部，我们可以直接使用调用该函数的对象的成员，而无需通过成员访问运算符。任何对类成员的直接访问都被看做`this`的隐式调用。
+
+#### 7.1.2.2 引入const成员函数
+默认情况下，`this`的类型是指向类类型非常量版本的常量指针，因此不能把`this`绑定在一个常量对象上，我们也不能在一个常量对象上调用普通的成员函数。
+
+使用`const`能够修改隐式`this`指针的类型。允许把`const`关键字放在成员函数的参数列表之后，此时，紧跟在参数列表后面的`const`表示`this`是一个指向常量的指针。像这样使用`const`的成员函数被称作 **常量成员函数**。
+
+> 常量对象，以及常量对象的引用或指针都只能调用常量成员函数。
+
+### 7.1.3 定义类相关的非成员函数
+定义非成员函数，通常把函数的声明和定义分离开来。如果函数在概念上属于类但是不定义在类中，则它一般应与类声明（而非定义）在同一个头文件内。在这种方式下，用户使用接口的任何部分都只需要引入一个文件。
+
+### 7.1.4 构造函数
+每个类都分别定义了它的对象被初始化的方式，类通过一个或几个特殊的成员函数来控制其对象的初始化过程，这些函数叫做 **构造函数**。构造函数的任务是初始化类对象的数据成员，无论何时只要类的对象被创建，就会执行构造函数。
+
+构造函数没有返回类型，构造函数可以有一个（可能为空的）参数列表和一个（可能为空的）函数体。类可以包含多个构造函数，但不同的构造函数直接必须在参数数量或参数类型上有所区别。
+
+构造函数不能被声明成`const`。当我们创建以一个类的`const`对象时，直到构造函数完成初始化过程，对象才能真正取得其“常量”属性。因此，构造函在`const`对象的构造过程中可以向其写值。
+
+#### 7.1.4.1 合成的默认构造函数
+类通过一个 **默认构造函数** 来控制默认初始化过程。默认构造函数没有任何实参。如果我们的类没有显式地定义构造函数，那么编译器将会为我们隐式地定义一个默认构造函数。该构造函数又被称为 **合成的默认构造函数**。这个合成的默认构造函数将按照以下规则初始化类的数据成员：
+- 如果存在类内的初始值，用它来初始化成员
+- 否则，默认初始化该成员
+```cpp
+struct Sales_data {
+  //新增的构造函数
+  Sales_data() = default;
+  Sales_data(const string &s) : bookNo(s) { }
+  Sales_data(const string &s, unsigned n, double p): bookNo(s), unit_sold(n), revenue(p*n) { }
+  Sales_data(istream &);
+  //之前已有的其他成员
+  string isbn() const { return bookNo; }
+  Sales_data& combine(const Sales_data&);
+  double avg_price() const;
+  string bookNo;
+  unsigned units_sold = 0;
+  double revenue = 0.0;
+};
+```
+>  `= default` 的含义
+> ```cpp
+> Sales_data() = default;
+> ```
+> 如果我们需要默认的行为，那么可以通过参数列表后面加上 ` = default `来要求编译器生成构造函数。其中 ` = default `既可以和
