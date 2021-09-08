@@ -3665,3 +3665,383 @@ if (read(read(cin, data1), data2))
 > `if`语句中条件部分的作用是从输入流中读取数据给两个`data`对象。
 
 ### 7.1.4 构造函数
+#### 练习7.11
+在你的`Sales_data`类中添加构造函数，然后编写一段程序令其用到每个构造函数。
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Sales_data
+{
+    Sales_data() = default;
+    Sales_data(const string &s) :bookNo(s) {}
+	Sales_data(const string &s, unsigned n, double p) :bookNo(s), units_sold(n), revenue(n*p) {}
+	Sales_data(istream &is);
+
+	string isbn() const { return bookNo; };
+	Sales_data& combine(const Sales_data&);
+
+	string bookNo;
+	unsigned units_sold = 0;
+	double revenue = 0.0;
+}
+
+istream &read(istream &is, Sales_data &item)
+{
+    double price = 0;
+    is >> item.bookNo >> item.unit_sold >> price;
+    item.revenue = price * item.unit_sold;
+    return is;
+}
+
+ostream &print(ostream &os, const Sales_data &item)
+{
+	os << item.isbn() << " " << item.units_sold << " " << item.revenue;
+	return os;
+}
+
+Sales_data add(const Sales_data &lhs, const Sales_data &rhs)
+{
+	Sales_data sum = lhs;
+	sum.combine(rhs);
+	return sum;
+}
+
+Sales_data::Sales_data(std::istream &is)
+{
+	read(is, *this);
+}
+
+Sales_data& Sales_data::combine(const Sales_data& rhs)
+{
+	units_sold += rhs.units_sold;
+	revenue += rhs.revenue;
+	return *this;
+}
+
+int main()
+{
+	Sales_data item1;
+	print(cout, item1) << endl;
+
+	Sales_data item2("0-201-78345-X");
+	print(cout, item2) << endl;
+
+	Sales_data item3("0-201-78345-X", 3, 20.00);
+	print(cout, item3) << endl;
+
+	Sales_data item4(cin);
+	print(cout, item4) << endl;
+
+	return 0;
+}
+```
+
+#### 练习7.12
+把只接受一个`istream`作为参数的构造函数定义移到类的内部。
+```cpp
+#include <string>
+#include <iostream>
+using namespace std;
+
+struct Sales_data
+{
+	Sales_data() = default;
+	Sales_data(const string &s) :bookNo(s) {}
+	Sales_data(const string &s, unsigned n, double p) :bookNo(s), units_sold(n), revenue(n*p) {}
+	Sales_data(istream &is) { read(is, *this); }
+
+	string isbn() const { return bookNo; };
+	Sales_data& combine(const Sales_data&);
+
+	string bookNo;
+	unsigned units_sold = 0;
+	double revenue = 0.0;
+};
+
+Sales_data& Sales_data::combine(const Sales_data& rhs)
+{
+	units_sold += rhs.units_sold;
+	revenue += rhs.revenue;
+	return *this;
+}
+
+std::istream &read(istream &is, Sales_data &item)
+{
+	double price = 0;
+	is >> item.bookNo >> item.units_sold >> price;
+	item.revenue = price * item.units_sold;
+	return is;
+}
+
+std::ostream &print(ostream &os, const Sales_data &item)
+{
+	os << item.isbn() << " " << item.units_sold << " " << item.revenue;
+	return os;
+}
+
+Sales_data add(const Sales_data &lhs, const Sales_data &rhs)
+{
+	Sales_data sum = lhs;
+	sum.combine(rhs);
+	return sum;
+}
+```
+
+#### 练习7.13
+使用`istream`构造函数重写第229页的程序。
+```cpp
+#include <string>
+#include <iostream>
+using namespace std;
+
+struct Sales_data
+{
+	Sales_data() = default;
+	Sales_data(const string &s) :bookNo(s) {}
+	Sales_data(const string &s, unsigned n, double p) :bookNo(s), units_sold(n), revenue(n*p) {}
+	Sales_data(istream &is) { read(is, *this); }
+
+	string isbn() const { return bookNo; };
+	Sales_data& combine(const Sales_data&);
+
+	string bookNo;
+	unsigned units_sold = 0;
+	double revenue = 0.0;
+};
+
+Sales_data& Sales_data::combine(const Sales_data& rhs)
+{
+	units_sold += rhs.units_sold;
+	revenue += rhs.revenue;
+	return *this;
+}
+
+std::istream &read(istream &is, Sales_data &item)
+{
+	double price = 0;
+	is >> item.bookNo >> item.units_sold >> price;
+	item.revenue = price * item.units_sold;
+	return is;
+}
+
+std::ostream &print(ostream &os, const Sales_data &item)
+{
+	os << item.isbn() << " " << item.units_sold << " " << item.revenue;
+	return os;
+}
+
+Sales_data add(const Sales_data &lhs, const Sales_data &rhs)
+{
+	Sales_data sum = lhs;
+	sum.combine(rhs);
+	return sum;
+}
+
+int main()
+{
+	Sales_data total(std::cin);
+	if (!total.isbn().empty())
+	{
+		std::istream &is = std::cin;
+		while (is)
+		{
+			Sales_data trans(is);
+			if (total.isbn() == trans.isbn())
+				total.combine(trans);
+			else
+			{
+				print(std::cout, total) << std::endl;
+				total = trans;
+			}
+		}
+		print(std::cout, total) << std::endl;
+	}
+	else
+	{
+		std::cerr << "No data?!" << std::endl;
+		return -1;
+	}
+
+	return 0;
+}
+```
+
+
+#### 练习7.14
+编写一个构造函数，令其用我们提供的类内初始值显式地初始化成员。
+```cpp
+Sales_data() : units_sold(0) , revenue(0) { }
+```
+
+#### 练习7.15
+为你的`Person`类添加正确的构造函数。
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Person
+{
+    Person() = default;
+    Person(const string &pname,const string &paddr) : name(pname), address(paddr) { }
+    Person(istream &is) { read(is, *this); }
+
+    string getName() const { return name; }
+    string getAddr() const { return address; }
+
+    string name;
+    string address;
+};
+
+istream &read(istream &is, Person &person)
+{
+    is >> person.name >> person.address;
+    return is;
+}
+
+ostream &print(ostream &os, const Person &person)
+{
+	os << person.name << " " << person.address;
+	return os;
+}
+```
+
+### 7.1.5 拷贝、赋值和析构
+
+## 7.2 访问控制与封装
+#### 练习7.16 
+在类的定义中对于访问说明符出现的位置和次数有限定吗？如果有，是什么？什么样的成员应该定义在`public`说明符之后？什么样的成员应该定义在`private`说明符之后？
+> 在类的定义中对于访问说明符出现的位置和次数没有限定。每个访问说明符指定了接下来的成员的访问级别，其有效范围直到出现下一个访问说明符或者达到类的结尾处为止。        
+> 如果某个成员能够在整个程序内都被访问，那么它应该定义为`public`; 如果某个成员只能在类内部访问，那么它应该定义为`private`。
+
+#### 练习7.17
+使用`class`和`struct`时有区别吗？如果有，是什么？
+> `class`和`struct`的唯一区别是默认的访问级别不同。
+
+#### 练习7.18
+封装是何意义？它有什么用处？
+> 将类内部分成员设置为外部不可见，而提供部分接口给外面，这样的行为叫做封装。封装隐藏了具体的实现，当我们使用某个抽象数据类型时，只需要考虑它提供什么接口操作，而不用去考虑它的具体实现。
+
+
+#### 练习7.19
+在你的`Person`类中，你将把哪些成员声明成`public`的？哪些声明成`private`的？解释你这样做的原因。
+> 构造函数、`getName()`、`getAddress()` 函数将设为`public`。`name` 和 `address`将设为`private`。函数是暴露给外部的接口，因此要设为`public`；而数据则应该隐藏让外部不可见。
+
+### 7.2.1 友元
+#### 练习7.20 
+友元在什么时候有用？请分别列举出使用友元的利弊。
+> 当其他类或者函数想要访问当前类的私有变量时，这个时候应该用友元。
+> - 利:
+>   - 与当前类有关的接口函数能直接访问类的私有变量。
+> - 弊**：
+* 牺牲了封装性与可维护性。
+
+#### 练习7.21
+修改你的`Sales_data`类使其隐藏实现的细节。你之前编写的关于`Sales_data`操作的程序应该继续使用，借助类的新定义重新编译该程序，确保其工作正确。
+> ```cpp
+> class Sales_data
+> {
+>	friend std::istream &read(std::istream &is, Sales_data &item);
+>	friend std::ostream &print(std::ostream &os, const Sales_data &item);
+>	friend Sales_data add(const Sales_data &lhs, const Sales_data &rhs);
+>
+> public:
+>	Sales_data() = default;
+>	Sales_data(const std::string &s) :bookNo(s) {}
+>	Sales_data(const std::string &s, unsigned n, double p) :bookNo(s), units_sold(n), revenue(n*p) {}
+>	Sales_data(std::istream &is) { read(is, *this); }
+>
+>	std::string isbn() const { return bookNo; };
+>	Sales_data& combine(const Sales_data&);
+>
+> private:
+>	std::string bookNo;
+>	unsigned units_sold = 0;
+>	double revenue = 0.0;
+> };
+>
+> Sales_data& Sales_data::combine(const Sales_data& rhs)
+> {
+>	units_sold += rhs.units_sold;
+>	revenue += rhs.revenue;
+>	return *this;
+> }
+>
+> std::istream &read(std::istream &is, Sales_data &item)
+> {
+>	double price = 0;
+>	is >> item.bookNo >> item.units_sold >> price;
+>	item.revenue = price * item.units_sold;
+>	return is;
+> }
+>
+> std::ostream &print(std::ostream &os, const Sales_data &item)
+> {
+>	os << item.isbn() << " " << item.units_sold << " " << item.revenue;
+>	return os;
+> }
+>
+> Sales_data add(const Sales_data &lhs, const Sales_data &rhs)
+> {
+>	Sales_data sum = lhs;
+>	sum.combine(rhs);
+>	return sum;
+> }
+>
+> ```
+
+#### 练习7.22
+修改你的`Person`类使其隐藏实现的细节。
+> ```cpp
+> #include <string>
+> #include <iostream>
+>
+> struct Person
+> {
+>	friend std::istream &read(std::istream &is, Person &person);
+>	friend std::ostream &print(std::ostream &os, const Person &person);
+>
+> public:
+>	Person() = default;
+>	Person(const std::string sname, const std::string saddr) :name(sname), address(saddr) { }
+>	Person(std::istream &is) { read(is, *this); }
+>
+>	std::string getName() const { return name; }
+>	std::string getAddress() const { return address; }
+> private:
+>	std::string name;
+>	std::string address;
+> };
+>
+> std::istream &read(std::istream &is, Person &person)
+> {
+>	is >> person.name >> person.address;
+>	return is;
+> }
+> 
+> std::ostream &print(std::ostream &os, const Person &person)
+> {
+> 	os << person.name << " " << person.address;
+>	return os;
+> }
+> ```
+
+### 7.3.1 类成员再探
+#### 练习7.23
+编写你自己的`Screen`类
+
+
+#### 练习7.24
+给你的`Screen`类添加三个构造函数：一个默认函数；另一个构造函数接受宽和高的值，然后将`contents`初始化成给定数量的空白；第三个构造函数接受宽和高的值以及一个字符，该字符作为初始化之后屏幕的内容。
+
+
+#### 练习7.25
+`Screen`能安全地依赖于拷贝和赋值操作的默认版本吗？如果能，为什么？如果不能，为什么？
+
+
+#### 练习7.26
+将`Sales_data::avg_price`定义成内联函数。
+
+

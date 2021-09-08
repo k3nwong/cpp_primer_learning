@@ -1679,8 +1679,127 @@ struct Sales_data {
   double revenue = 0.0;
 };
 ```
->  `= default` 的含义
-> ```cpp
-> Sales_data() = default;
-> ```
-> 如果我们需要默认的行为，那么可以通过参数列表后面加上 ` = default `来要求编译器生成构造函数。其中 ` = default `既可以和
+-  `= default` 的含义
+```cpp
+Sales_data() = default;
+```
+如果我们需要默认的行为，那么可以通过参数列表后面加上 ` = default `来要求编译器生成构造函数。其中 ` = default `既可以和声明一起出现在类的内部，也可以作为定义出现在类的外部，如果` = default`在类的内部，则默认构造函数是内联的；如果它在类的外部，则该成员默认情况下不是内联的。
+
+- 构造函数初始值列表
+```cpp
+Sales_data(const string &s) : bookNo(s) { }
+Sales_data(const string &s, unsigned n, double p) : bookNo(s), unit_sold(n), revenue(p*n) { }
+```
+
+上述定义中出现了新的部分，即冒号和花括号之间的代码。我们把新出现的部分称为 **构造函数初始值列表**。它负责为新创建的对象的一个或几个数据成员赋初值。构造函数初始值是成员名字的一个列表，每个名字后面紧跟括号括起来的（或者在花括号内的）成员初始值，不同成员的初始化通过逗号分隔开来。
+
+### 7.1.5 拷贝、赋值和析构
+除了定义类的对象如何初始化之外，类还需要控制拷贝、赋值和销毁对象时发生的行为。如果我们不主动定义这些操作，则编译器将替我们合成它们，而这种合成的版本对某些类来说会失效。
+
+
+## 7.2 访问控制与封装
+在C++中我们使用 **访问说明符** 加强类的封装性：
+- 定义在`public`说明符之后的成员在整个程序内可被访问，`public`成员定义类的接口
+- 定义在`private`说明符之后的成员可以被类的成员函数访问，但是不能使用该类的代码访问。`private`部分封装了（即隐藏了）类的实现细节
+```cpp
+class Sales_data{
+  public:
+    Sales_data() = default;
+    Sales_data(const string &s, unsigned n, double p) : bookNo(s), unit_sold(n), revenue(p*n) { }
+    Sales_data(const string &s) : bookNo(s) { }
+    Sales_data(istream&);
+    string isbn() const { return bookNo; }
+    Sales_data &combine(const Sales_data&);
+  private:
+    double avg_price() const
+        { return units_sold ? revenue/sold : 0; }
+    string bookNo;
+    unsigned units_sold = 0;
+    double revenue = 0.0;
+}
+```
+
+#### 使用`class`或`struct`关键字
+`struct`和`class`的默认访问权限不太一样。
+
+类可以在它的第一个访问说明符之前定义，对这种成员的访问依赖于类定义的方式。如果我们使用`struct`关键字，则定义在第一个访问说明符之前的成员是`public`的；如果我们使用`class`关键字，则这些成员是`private`的。
+
+
+### 7.2.1 友元
+类可以允许其他类或者函数访问它的非公有成员，方法是令其他类或者函数称为它的 **友元**。如果类想把一个函数作为它的友元，需要增加一条以`friend`关键字开始的函数声明语句即可：
+```cpp
+class Sales_data {
+  //为Sales_data的非成员函数所做的友元声明
+  friend Sales_data add(const Sales_data&, const Sales_data&);
+  friend istream &read(istream&, Sales_data&);
+  friend ostream &print(ostream&, Sales_data&);
+  //其他成员及访问说明符与之前一直
+  public:
+    Sales_data() = default;
+    Sales_data(const string &s, unsigned n, double p) : bookNo(s), unit_sold(n), revenue(p*n) { }
+    Sales_data(const string &s) : bookNo(s) { }
+    Sales_data(istream&);
+    string isbn() const { return bookNo; }
+    Sales_data &combine(const Sales_data&);
+  private:
+    string bookNo;
+    unsigned units_sold = 0;
+    double revenue = 0.0;
+};
+//Sales_data接口的非成员组成部分的声明
+Sales_data add(const Sales_data&, const Sales_data&);
+istream &read(istream&, Sales_data&);
+ostream &print(ostream&, const Sales_data);
+```
+友元声明只能出现在类定义的内部，但是在类内出现的具体位置不限。一般来说最好在类定义开始或结束前的位置集中声明友元。
+
+## 7.3 类的其他特性
+### 7.3.1 类成员再探
+#### 7.3.1.1 类自定义别名
+类可以在自定义某种类型在类中的别名。
+```cpp
+class Screen {
+  public:
+    typedef std::string::size_type pos;
+    //or
+    using pos = std::string::size_type;
+  private:
+    pos cursor;
+    pos height = 0, width = 0;
+    std::string contents; 
+};
+```
+
+#### 7.3.1.2 令成员作为内联函数
+在类中，一些规模较小的函数适合被声明成内联函数。定义在类内部的成员函数是自动`inline`的。我们可以在类的内部把`inline`作为声明的一部分显示地声明成员函数，也能在类的外部用`inline`关键字修饰函数的定义：
+```cpp
+inline                               //可以在函数的定义处指定inline
+Screen &Screen::move(pos r, pos c)
+{
+  pos row = r * width;               //计算行的位置
+  cursor = row + c;                  //在行内将光标移动到指定的列
+  return *this;                      //以左值的形式返回对象
+}
+char Screen::get(pos r, pos c) const //在类的内部声明成inline
+{
+  pos row = r * width;               //计算行的位置
+  return contents[row + c];          //返回给定列的字符
+}
+```
+
+#### 7.3.1.3 可变数据成员
+我们希望能够修改类的某个数据成员，即使在一个`const`成员函数内，可以通过在变量的声明中加入`mutable`关键字完成。
+```cpp
+class Screen {
+  public:
+    void some_member() const;
+  private:
+    mutable size_t access_ctr; //即使在一个const对象内也能被修改
+};
+void Screen::some_member() const
+{
+  ++access_ctr;                //保存一个计数值，用于记录成员函数被调用的次数
+}
+```
+
+### 7.3.2 返回*this的成员函数
